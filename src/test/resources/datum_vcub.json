@@ -1,0 +1,17 @@
+{
+  "GID": 117,
+  "NUMSTAT": 133,
+  "IDENT": 132,
+  "ADRESSE": "30 place des Capucins",
+  "COMMUNE": "BORDEAUX",
+  "DATESERV": "",
+  "LIGNCORR": "58/Citéis 43/Citéis 45/Lianes 10 (spécial Train)/Lianes 11/Lianes 15/Lianes 16",
+  "NBSUPPOR": 20,
+  "NOM": "Capucins",
+  "TARIF": "VLS",
+  "TERMBANC": "OUI",
+  "TYPEA": "VCUB",
+  "GEOM_O": 0,
+  "CDATE": 20160617111044,
+  "MDATE": 20160617113652
+}

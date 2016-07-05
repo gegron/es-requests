@@ -1,4 +1,4 @@
-package fr.xebia.xebicon;
+package fr.xebia.xebicon.vcub;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;

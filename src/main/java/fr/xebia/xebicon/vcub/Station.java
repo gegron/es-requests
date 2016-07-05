@@ -1,4 +1,4 @@
-package fr.xebia.xebicon;
+package fr.xebia.xebicon.vcub;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -2,6 +2,7 @@ package fr.xebia.xebicon;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;
+import fr.xebia.xebicon.vcub.Station;
 import org.junit.Test;
 
 import java.io.IOException;

@@ -1,3 +1,29 @@
+## TODO
+
+- Ajouter Lombok ?
+
+## Données du blog
+
+### Initialisation des données
+
+    $ docker run -p 9200:9200 elasticsearch:2.3.3
+    $ cd src/main/resources
+    $ curl -XPUT 192.168.99.100:9200/xebia/blog/_bulk --data-binary @xebiablog.json
+
+### Recherche à implémenter
+
+- Recherche sur l'auteur (en mode multi-critère avec mapping différent)
+- Recherche sur le titre
+- Recherche avec filtre et sans filtre (le filtre est mis en cache et est restrictif, attention il faut utiliser le filtered-query !)
+    - Filtre avec les catégories
+- Search as you type (ou API suggestion)
+
+En Jest montrer les 2 possibilités
+
+- Utilisation du client elasticsearch
+- Copier coller d'une requête Json
+
+
 ## Description des attributs pour les données VCUB :
 
 
@@ -28,6 +54,6 @@ SIG - CUB suivi de l'année d'extraction des données. Ex : SIG - CUB 2013
 
 ### Pour initialiser les données
 
-    docker run -p 9200:9200 elasticsearch:2.3.3
+    $ docker run -p 9200:9200 elasticsearch:2.3.3
 
 Et exécuter le main InitVcubData.java

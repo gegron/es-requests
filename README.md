@@ -26,7 +26,8 @@ http://data.bordeaux-metropole.fr/dicopub/#TB_STVEL_P
 SIG - CUB suivi de l'année d'extraction des données. Ex : SIG - CUB 2013
 
 
-To init data :
+### Pour initialiser les données
 
-docker run -p 9200:9200 elasticsearch:2.3.3
-launch InitVcubData main class
+    docker run -p 9200:9200 elasticsearch:2.3.3
+
+Et exécuter le main InitVcubData.java

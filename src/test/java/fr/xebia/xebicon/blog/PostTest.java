@@ -14,7 +14,7 @@ public class PostTest {
     public void should_convert_object_to_json() throws JsonProcessingException {
         // Given
         ObjectMapper objectMapper = new ObjectMapper();
-        Post post = new Post("category", "content", "creator", "description", "14/07/1987", "title");
+        Post post = new Post(new String[]{"category"}, "content", "creator", "description", "14/07/1987", "title");
 
         // When
         String json = objectMapper.writeValueAsString(post);

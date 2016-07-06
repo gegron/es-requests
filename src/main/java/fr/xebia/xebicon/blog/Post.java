@@ -3,6 +3,8 @@ package fr.xebia.xebicon.blog;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 public class Post {
 
     public static final String POST_INDEX = "xebia";
@@ -15,7 +17,7 @@ public class Post {
     public static final String FIELD_PUBDATE = "pubDate";
     public static final String FIELD_TITLE = "title";
 
-    private String category;
+    private List<String> category;
     private String content;
     private String creator;
     private String description;
@@ -24,7 +26,7 @@ public class Post {
 
     @JsonCreator
     public Post(
-            @JsonProperty(value = "category") String category,
+            @JsonProperty(value = "category") List<String> category,
             @JsonProperty(value = "content") String content,
             @JsonProperty(value = "creator") String creator,
             @JsonProperty(value = "description") String description,
@@ -39,11 +41,11 @@ public class Post {
         this.title = title;
     }
 
-    public String getCategory() {
+    public List<String> getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(List<String> category) {
         this.category = category;
     }
 

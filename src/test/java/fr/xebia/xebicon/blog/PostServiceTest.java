@@ -27,5 +27,4 @@ public class PostServiceTest {
         System.out.println("Count found: " + posts.size());
     }
 
-
 }

@@ -1,14 +1,19 @@
 package fr.xebia.xebicon.common;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UncheckedIOException;
+import java.io.*;
 
 public class Resources {
-    public static BufferedReader getResource(String resourceName)  {
+    public static BufferedReader getResource(String resourceName) {
         try {
             return new BufferedReader(new InputStreamReader(com.google.common.io.Resources.getResource(resourceName).openStream()));
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public static BufferedReader getFile(String filePath) {
+        try {
+            return new BufferedReader(new InputStreamReader(new FileInputStream(new File(filePath))));
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

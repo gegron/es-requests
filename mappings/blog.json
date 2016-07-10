@@ -1,0 +1,33 @@
+{
+  "settings": {
+    "index": {
+      "number_of_shards": "1",
+      "number_of_replicas": "0"
+    }
+  },
+  "mappings": {
+    "blog": {
+      "properties": {
+        "category": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "creator": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "pubDate": {
+          "type": "date",
+          "format": "strict_date_optional_time||epoch_millis"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

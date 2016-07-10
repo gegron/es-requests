@@ -12,7 +12,7 @@ public enum MyJestClient {
     MyJestClient() {
         JestClientFactory factory = new JestClientFactory();
         factory.setHttpClientConfig(new HttpClientConfig
-                .Builder("http://192.168.99.100:9200")
+                .Builder("http://localhost:9200")
                 .multiThreaded(true)
                 .build());
         this.client = factory.getObject();

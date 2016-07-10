@@ -1,6 +1,8 @@
 package fr.xebia.xebicon.blog;
 
+import fr.xebia.xebicon.common.IndexService;
 import fr.xebia.xebicon.common.JsonParser;
+import fr.xebia.xebicon.common.Resources;
 import io.searchbox.client.JestClient;
 import io.searchbox.core.*;
 import org.elasticsearch.index.query.MatchQueryBuilder;
@@ -24,10 +26,12 @@ public class PostService {
 
     private final JsonParser jsonParser;
     private final JestClient client;
+    private final IndexService indexService;
 
     public PostService(JestClient jestClient) {
         this.client = jestClient;
         jsonParser = new JsonParser();
+        indexService = new IndexService(jestClient);
         initPosts();
     }
 
@@ -82,7 +86,7 @@ public class PostService {
                     .addType(POST_TYPE)
                     .build());
 
-            if(!count.isSucceeded()) {
+            if (!count.isSucceeded()) {
                 return 0;
             }
 
@@ -94,17 +98,24 @@ public class PostService {
     }
 
     public void initPosts() {
-        if (countPosts() > 0) {
-            return;
+        String mapping = Resources.getFile("mappings/blog.json").lines().collect(Collectors.joining("\n"));
+
+        if (!indexService.indexContainsMapping(POST_INDEX, POST_TYPE, mapping)) {
+            LOGGER.info("mapping change reinitialize xebia index");
+
+            indexService.deleteIndex(POST_INDEX);
+            indexService.createIndex(POST_INDEX, mapping);
         }
 
-        try (Stream<String> lines = getResource("xebiablog.json").lines()) {
+        if (countPosts() == 0) {
+            try (Stream<String> lines = getResource("xebiablog.json").lines()) {
 
-            List<Post> posts = lines
-                    .map(jsonParser::asPost)
-                    .collect(Collectors.toList());
+                List<Post> posts = lines
+                        .map(jsonParser::asPost)
+                        .collect(Collectors.toList());
 
-            indexAll(posts);
+                indexAll(posts);
+            }
         }
     }
 

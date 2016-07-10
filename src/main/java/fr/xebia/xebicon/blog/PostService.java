@@ -75,14 +75,19 @@ public class PostService {
         }
     }
 
-    public Double countPosts() {
+    public double countPosts() {
         try {
             CountResult count = client.execute(new Count.Builder()
                     .addIndex(POST_INDEX)
                     .addType(POST_TYPE)
                     .build());
 
+            if(!count.isSucceeded()) {
+                return 0;
+            }
+
             return count.getCount();
+
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

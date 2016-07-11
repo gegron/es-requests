@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static fr.xebia.xebicon.jest.MyJestClient.getJestClient;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PostServiceTest {
 
@@ -17,14 +18,16 @@ public class PostServiceTest {
     }
 
     @Test
-    public void should_find_java_posts() {
+    public void should_find_posts_by_creator() {
         // Given
+        String expectedCreator = "Jean-Louis Rigau";
 
         // When
-        List<Post> posts = postService.searchByTitle("Java");
+        List<Post> posts = postService.searchByCreator(expectedCreator);
 
         // Then
-        System.out.println("Count found: " + posts.size());
+        assertThat(posts.size()).isPositive();
+        assertThat(posts).allMatch(post -> post.getCreator().equals(expectedCreator));
     }
 
 }

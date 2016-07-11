@@ -5,7 +5,9 @@ import fr.xebia.xebicon.common.JsonParser;
 import fr.xebia.xebicon.common.Resources;
 import io.searchbox.client.JestClient;
 import io.searchbox.core.*;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,9 +43,21 @@ public class PostService {
         searchSourceBuilder
                 .query(new MatchQueryBuilder(FIELD_TITLE, searchedTitle));
 
+        return executeSearchRequest(searchSourceBuilder);
+    }
+
+    public List<Post> searchByCreator(String creator) {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
+                .query(new BoolQueryBuilder()
+                        .filter(new TermQueryBuilder(FIELD_CREATOR, creator)));
+
+        return executeSearchRequest(searchSourceBuilder);
+
+    }
+
+    private List<Post> executeSearchRequest(SearchSourceBuilder searchSourceBuilder) {
         try {
             LOGGER.info("Request : {}", searchSourceBuilder.toString());
-
             SearchResult result = client.execute(new Search.Builder(searchSourceBuilder.toString())
                     .addIndex(POST_INDEX)
                     .addType(POST_TYPE)
@@ -53,7 +67,6 @@ public class PostService {
                     .stream()
                     .map(hit -> hit.source)
                     .collect(toList());
-
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -118,5 +131,4 @@ public class PostService {
             }
         }
     }
-
 }

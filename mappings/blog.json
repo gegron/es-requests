@@ -3,6 +3,20 @@
     "index": {
       "number_of_shards": "1",
       "number_of_replicas": "0"
+    },
+    "analysis": {
+      "analyzer": {
+        "my_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase"
+          ],
+          "char_filter": [
+            "html_strip"
+          ]
+        }
+      }
     }
   },
   "mappings": {
@@ -12,7 +26,8 @@
           "type": "string"
         },
         "content": {
-          "type": "string"
+          "type": "string",
+          "analyzer": "my_analyzer"
         },
         "creator": {
           "type": "string",

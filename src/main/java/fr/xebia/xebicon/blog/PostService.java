@@ -55,6 +55,13 @@ public class PostService {
 
     }
 
+    public List<Post> search(String text) {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
+                .query(new MatchQueryBuilder("content", text));
+
+        return executeSearchRequest(searchSourceBuilder);
+    }
+
     private List<Post> executeSearchRequest(SearchSourceBuilder searchSourceBuilder) {
         try {
             LOGGER.info("Request : {}", searchSourceBuilder.toString());

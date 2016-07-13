@@ -2,7 +2,7 @@ import groovy.json.JsonOutput
 
 Locale.setDefault(Locale.ENGLISH)
 
-def result = new IntRange(1, 12).collect {
+def result = new IntRange(1, 24).collect {
     new URL("http://blog.xebia.fr/feed/?paged=$it").text
 }
 .collect {

@@ -18,6 +18,34 @@ public class PostServiceTest {
     }
 
     @Test
+    public void should_find_post_related_to_kodo_kojo() {
+        //Given
+        String term = "kodo kojo";
+
+        //when
+        List<Post> posts = postService.search(term);
+
+        //Then
+        assertThat(posts).hasSize(2);
+        assertThat(posts.get(0).getTitle()).isEqualTo("Kodo Kojo : un projet open source pour gérer vos usines logicielles");
+        assertThat(posts.get(1).getTitle()).isEqualTo("Kodo Kojo ouvre ses sources !");
+    }
+
+    @Test
+    public void should_find_post_related_to_full_text_search() {
+        //Given
+        String term = "recherche full text";
+
+        //when
+        List<Post> posts = postService.search(term);
+
+        //Then
+        assertThat(posts).hasSize(10);
+        assertThat(posts.get(0).getTitle()).isEqualTo("Xebia accueille le Mongo User Group le 2 avril");
+        assertThat(posts.get(1).getTitle()).isEqualTo("Logstash, ElasticSearch, Kibana – S01E00 – Analyse de vos données en temps réel cloud-ready");
+    }
+
+    @Test
     public void should_find_posts_by_creator() {
         // Given
         String expectedCreator = "Jean-Louis Rigau";

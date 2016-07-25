@@ -3,6 +3,7 @@ package fr.xebia.xebicon.common;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
+import io.searchbox.cluster.Health;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.DeleteIndex;
 import io.searchbox.indices.mapping.GetMapping;
@@ -35,10 +36,13 @@ public class IndexService {
         }
     }
 
-    public String getSettingsOf(String indexName) {
+    public Optional<String> getSettingsOf(String indexName) {
         try {
             JestResult getMappingResult = client.execute(new GetSettings.Builder().addIndex(indexName).build());
-            return getMappingResult.getJsonString();
+            if (!getMappingResult.isSucceeded()) {
+                return Optional.empty();
+            }
+            return Optional.of(getMappingResult.getJsonString());
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -55,9 +59,21 @@ public class IndexService {
 
     }
 
+    public boolean indexContainsSettings(String indexName, String mappingAndSettings) {
+        return getSettingsOf(indexName)
+                .map(currentSettings -> {
+                    JsonNode currentSettingsNode = jsonParser.asJsonNode(currentSettings);
+                    JsonNode expectedSettingsNode = jsonParser.asJsonNode(mappingAndSettings);
+
+                    return currentSettingsNode.get(indexName).get("settings").equals(expectedSettingsNode.get("settings"));
+                }).orElse(false);
+    }
+
     public void createIndex(String indexName, String mapping) {
         try {
             client.execute(new CreateIndex.Builder(indexName).settings(mapping).build());
+            client.execute(new Health.Builder().setParameter("wait_for_status", "yellow").build());
+
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

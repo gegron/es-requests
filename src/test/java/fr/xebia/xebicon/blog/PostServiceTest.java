@@ -46,6 +46,20 @@ public class PostServiceTest {
     }
 
     @Test
+    public void should_find_post_related_to_typesafe_when_search_word_lightbend() {
+        //Given
+        String term = "lightbend";
+
+        //when
+        List<Post> posts = postService.search(term);
+
+        //Then
+        assertThat(posts).hasSize(10);
+        assertThat(posts.get(0).getTitle()).isEqualTo("Typesafe, partenaire de Xebia, devient Lightbend");
+        assertThat(posts.get(1).getTitle()).isEqualTo("Xebia organise un Hands’on Akka Java/Scala le 18 juin");
+    }
+
+    @Test
     public void should_find_posts_by_creator() {
         // Given
         String expectedCreator = "Jean-Louis Rigau";

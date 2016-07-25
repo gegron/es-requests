@@ -120,8 +120,9 @@ public class PostService {
     public void initPosts() {
         String mapping = Resources.getFile("mappings/blog.json").lines().collect(Collectors.joining("\n"));
 
-        if (!indexService.indexContainsMapping(POST_INDEX, POST_TYPE, mapping)) {
-            LOGGER.info("mapping change reinitialize xebia index");
+        if (!indexService.indexContainsMapping(POST_INDEX, POST_TYPE, mapping) ||
+                !indexService.indexContainsSettings(POST_INDEX, mapping)) {
+            LOGGER.info("mapping or settings change reinitialize xebia index");
 
             indexService.deleteIndex(POST_INDEX);
             indexService.createIndex(POST_INDEX, mapping);

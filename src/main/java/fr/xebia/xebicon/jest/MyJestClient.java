@@ -14,6 +14,7 @@ public enum MyJestClient {
         factory.setHttpClientConfig(new HttpClientConfig
                 .Builder("http://localhost:9200")
                 .multiThreaded(true)
+                .readTimeout(10_000)
                 .build());
         this.client = factory.getObject();
     }

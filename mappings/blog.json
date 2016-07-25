@@ -10,10 +10,19 @@
           "type": "custom",
           "tokenizer": "standard",
           "filter": [
-            "lowercase"
+            "lowercase"  ,
+            "my_synonym"
           ],
           "char_filter": [
             "html_strip"
+          ]
+        }
+      },
+      "filter": {
+        "my_synonym": {
+          "type": "synonym",
+          "synonyms": [
+            "lightbend, typesafe => lightbend, typesafe"
           ]
         }
       }

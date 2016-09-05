@@ -7,6 +7,7 @@ import java.util.List;
 
 import static fr.xebia.xebicon.jest.MyJestClient.getJestClient;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.extractProperty;
 
 public class PostServiceTest {
 
@@ -26,9 +27,10 @@ public class PostServiceTest {
         List<Post> posts = postService.search(term);
 
         //Then
-        assertThat(posts).hasSize(2);
-        assertThat(posts.get(0).getTitle()).isEqualTo("Kodo Kojo : un projet open source pour gérer vos usines logicielles");
-        assertThat(posts.get(1).getTitle()).isEqualTo("Kodo Kojo ouvre ses sources !");
+        assertThat(extractProperty("title").from(posts))
+                .containsOnly(
+                        "Kodo Kojo : un projet open source pour gérer vos usines logicielles",
+                        "Kodo Kojo ouvre ses sources !");
     }
 
     @Test

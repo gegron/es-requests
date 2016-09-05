@@ -18,6 +18,9 @@ public class PostServiceTest {
         postService = new PostService(getJestClient());
     }
 
+    /**
+     * Recherche full text
+     */
     @Test
     public void should_find_post_related_to_kodo_kojo() {
         //Given
@@ -33,6 +36,10 @@ public class PostServiceTest {
                         "Kodo Kojo ouvre ses sources !");
     }
 
+    /**
+     * Recherche full text
+     * (strip HTML par le mapping)
+     */
     @Test
     public void should_find_post_related_to_full_text_search() {
         //Given
@@ -47,6 +54,9 @@ public class PostServiceTest {
         assertThat(posts.get(1).getTitle()).isEqualTo("Logstash, ElasticSearch, Kibana – S01E00 – Analyse de vos données en temps réel cloud-ready");
     }
 
+    /**
+     * Recherche par synonyme (changement de mapping)
+     */
     @Test
     public void should_find_post_related_to_typesafe_when_search_word_lightbend() {
         //Given
@@ -61,6 +71,9 @@ public class PostServiceTest {
         assertThat(posts.get(1).getTitle()).isEqualTo("Xebia organise un Hands’on Akka Java/Scala le 18 juin");
     }
 
+    /**
+     * Recherche exacte (changement de mapping)
+     */
     @Test
     public void should_find_posts_by_creator() {
         // Given
@@ -73,5 +86,73 @@ public class PostServiceTest {
         assertThat(posts.size()).isPositive();
         assertThat(posts).allMatch(post -> post.getCreator().equals(expectedCreator));
     }
+
+    /**
+     * TODO: Rechercher des articles en tenant compte des accents
+     * Si un auteur se nomme Léa
+     *
+     * Recherche avec lea ou léa ou Léa doit retourner les mêmes articles
+     */
+    @Test
+    public void should_find_posts_according_to_accent() {
+        // Given
+
+        // When
+
+        // Then
+    }
+
+    /**
+     * TODO: use aggregate
+     */
+    @Test
+    public void should_use_aggregate_to_find_with_category() {
+        // Given
+
+        // When
+
+        // Then
+    }
+
+    /**
+     * TODO: use completion suggester
+     * https://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters-completion.html#search-suggesters-completion
+     *
+     * Prend en compte les erreurs, ne retourne pas les documents complets
+     *
+     */
+    @Test
+    public void should_use_completion_to_help_build_search_request() {
+        // Given
+
+        // When
+
+        // Then
+    }
+
+    /**
+     * TODO: trouver un cas d'utilisation
+     */
+    @Test
+    public void should_use_multi_match_query() {
+        // Given
+
+        // When
+
+        // Then
+    }
+
+    /**
+     * TODO:
+     */
+    @Test
+    public void should_use_stop_words() {
+        // Given
+
+        // When
+
+        // Then
+    }
+
 
 }

@@ -10,11 +10,18 @@
           "type": "custom",
           "tokenizer": "standard",
           "filter": [
-            "lowercase"  ,
+            "lowercase",
             "my_synonym"
           ],
           "char_filter": [
             "html_strip"
+          ]
+        },
+        "creator_analyzer": {
+          "type": "custom",
+          "tokenizer": "keyword",
+          "filter": [
+            "my_ascii_folding"
           ]
         }
       },
@@ -24,6 +31,10 @@
           "synonyms": [
             "lightbend, typesafe => lightbend, typesafe"
           ]
+        },
+        "my_ascii_folding": {
+          "type": "asciifolding",
+          "preserve_original": "true"
         }
       }
     }
@@ -40,7 +51,7 @@
         },
         "creator": {
           "type": "string",
-          "index": "not_analyzed"
+          "analyzer": "creator_analyzer"
         },
         "description": {
           "type": "string"

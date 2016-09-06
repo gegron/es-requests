@@ -90,16 +90,24 @@ public class PostServiceTest {
     /**
      * TODO: Rechercher des articles en tenant compte des accents
      * Si un auteur se nomme Léa
-     *
+     * <p>
      * Recherche avec lea ou léa ou Léa doit retourner les mêmes articles
      */
     @Test
     public void should_find_posts_according_to_accent() {
         // Given
+        String expectedCreator = "Séven Le Mesle";
+        String creatorWithoutAccent = "Seven Le Mesle";
 
         // When
+        List<Post> postsWithoutAccent = postService.searchByCreator(creatorWithoutAccent);
+        List<Post> postsWithAccent = postService.searchByCreator(expectedCreator);
 
         // Then
+        assertThat(postsWithoutAccent.size()).isPositive();
+        assertThat(postsWithAccent.size()).isPositive();
+        assertThat(postsWithoutAccent).allMatch(post -> post.getCreator().equals("Séven Le Mesle"));
+        assertThat(postsWithAccent).containsOnly(postsWithoutAccent.stream().toArray(Post[]::new));
     }
 
     /**
@@ -117,9 +125,8 @@ public class PostServiceTest {
     /**
      * TODO: use completion suggester
      * https://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters-completion.html#search-suggesters-completion
-     *
+     * <p>
      * Prend en compte les erreurs, ne retourne pas les documents complets
-     *
      */
     @Test
     public void should_use_completion_to_help_build_search_request() {

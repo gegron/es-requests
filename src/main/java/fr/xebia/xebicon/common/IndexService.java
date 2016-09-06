@@ -11,6 +11,7 @@ import io.searchbox.indices.settings.GetSettings;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.Objects;
 import java.util.Optional;
 
 public class IndexService {
@@ -65,8 +66,28 @@ public class IndexService {
                     JsonNode currentSettingsNode = jsonParser.asJsonNode(currentSettings);
                     JsonNode expectedSettingsNode = jsonParser.asJsonNode(mappingAndSettings);
 
-                    return currentSettingsNode.get(indexName).get("settings").equals(expectedSettingsNode.get("settings"));
+                    return containsSameAnalysis(indexName, currentSettingsNode, expectedSettingsNode);
                 }).orElse(false);
+    }
+
+    private boolean containsSameAnalysis(String indexName, JsonNode currentSettingsNode, JsonNode expectedSettingsNode) {
+
+        return Objects.equals(
+                retrieveByPath(currentSettingsNode.get(indexName), "settings.index.analysis"),
+                retrieveByPath(expectedSettingsNode, "settings.analysis"));
+    }
+
+    private JsonNode retrieveByPath(JsonNode jsonNode, String path) {
+        String[] nodes = path.split("\\.");
+
+        for (String node : nodes) {
+            jsonNode = jsonNode.get(node);
+            if (jsonNode == null) {
+                return null;
+            }
+        }
+
+        return jsonNode;
     }
 
     public void createIndex(String indexName, String mapping) {

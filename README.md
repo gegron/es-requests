@@ -7,9 +7,7 @@
 ### Initialisation des données
 
     $ docker run -p 9200:9200 elasticsearch:2.3.3
-    $ cd src/main/resources
-    $ curl -XPUT 192.168.99.100:9200/xebia/blog/_bulk --data-binary @xebiablog.json
-
+   
 ### Recherche à implémenter
 
 - Recherche sur l'auteur (en mode multi-critère avec mapping différent)

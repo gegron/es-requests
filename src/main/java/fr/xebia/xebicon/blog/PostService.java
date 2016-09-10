@@ -5,16 +5,21 @@ import fr.xebia.xebicon.common.JsonParser;
 import fr.xebia.xebicon.common.Resources;
 import io.searchbox.client.JestClient;
 import io.searchbox.core.*;
+import io.searchbox.core.search.aggregation.MetricAggregation;
+import io.searchbox.core.search.aggregation.TermsAggregation;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,7 +42,7 @@ public class PostService {
         initPosts();
     }
 
-    public List<Post> searchByTitle(String searchedTitle) {
+    public SearchResults searchByTitle(String searchedTitle) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
         searchSourceBuilder
@@ -46,7 +51,7 @@ public class PostService {
         return executeSearchRequest(searchSourceBuilder);
     }
 
-    public List<Post> searchByCreator(String creator) {
+    public SearchResults searchByCreator(String creator) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
                 .query(new BoolQueryBuilder()
                         .filter(new TermQueryBuilder(FIELD_CREATOR, creator)));
@@ -55,14 +60,17 @@ public class PostService {
 
     }
 
-    public List<Post> search(String text) {
+    public SearchResults search(String text) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
-                .query(new MatchQueryBuilder("content", text));
+                .query(new MatchQueryBuilder("content", text))
+                .aggregation(AggregationBuilders.terms("byCreator").field("creator"))
+                .aggregation(AggregationBuilders.terms("byCategory").field("category"));
+
 
         return executeSearchRequest(searchSourceBuilder);
     }
 
-    private List<Post> executeSearchRequest(SearchSourceBuilder searchSourceBuilder) {
+    private SearchResults executeSearchRequest(SearchSourceBuilder searchSourceBuilder) {
         try {
             LOGGER.info("Request : {}", searchSourceBuilder.toString());
             SearchResult result = client.execute(new Search.Builder(searchSourceBuilder.toString())
@@ -70,16 +78,34 @@ public class PostService {
                     .addType(POST_TYPE)
                     .build());
 
-            return result.getHits(Post.class)
+            return new SearchResults(result.getHits(Post.class)
                     .stream()
                     .map(hit -> hit.source)
-                    .collect(toList());
+                    .collect(toList()), aggregationsToFilters(result.getAggregations()));
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    public int indexAll(List<Post> posts) {
+    private List<Aggregation> aggregationsToFilters(MetricAggregation aggregations) {
+        List<Aggregation> results = new ArrayList<>();
+
+        aggregationToFilter("creator", aggregations.getTermsAggregation("byCreator")).ifPresent(results::add);
+        aggregationToFilter("category", aggregations.getTermsAggregation("byCategory")).ifPresent(results::add);
+
+        return results;
+    }
+
+    private Optional<Aggregation> aggregationToFilter(String field, TermsAggregation aggregation) {
+        return Optional.ofNullable(aggregation)
+                .map(agg -> agg.getBuckets()
+                        .stream()
+                        .map(TermsAggregation.Entry::getKey)
+                        .collect(Collectors.collectingAndThen(Collectors.toList(),
+                                keys -> new Aggregation(field, keys))));
+    }
+
+    private int indexAll(List<Post> posts) {
         List<Index> bulkActions = posts.stream()
                 .map(Index.Builder::new)
                 .map(Index.Builder::build)
@@ -99,7 +125,7 @@ public class PostService {
         }
     }
 
-    public double countPosts() {
+    private double countPosts() {
         try {
             CountResult count = client.execute(new Count.Builder()
                     .addIndex(POST_INDEX)

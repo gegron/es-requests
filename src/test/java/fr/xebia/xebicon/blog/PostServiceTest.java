@@ -3,6 +3,7 @@ package fr.xebia.xebicon.blog;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static fr.xebia.xebicon.jest.MyJestClient.getJestClient;
@@ -27,10 +28,10 @@ public class PostServiceTest {
         String term = "kodo kojo";
 
         //when
-        List<Post> posts = postService.search(term);
+        SearchResults result = postService.search(term);
 
         //Then
-        assertThat(extractProperty("title").from(posts))
+        assertThat(extractProperty("title").from(result.posts))
                 .containsOnly(
                         "Kodo Kojo : un projet open source pour gérer vos usines logicielles",
                         "Kodo Kojo ouvre ses sources !");
@@ -46,12 +47,12 @@ public class PostServiceTest {
         String term = "recherche full text";
 
         //when
-        List<Post> posts = postService.search(term);
+        SearchResults result = postService.search(term);
 
         //Then
-        assertThat(posts).hasSize(10);
-        assertThat(posts.get(0).getTitle()).isEqualTo("Xebia accueille le Mongo User Group le 2 avril");
-        assertThat(posts.get(1).getTitle()).isEqualTo("Logstash, ElasticSearch, Kibana – S01E00 – Analyse de vos données en temps réel cloud-ready");
+        assertThat(result.posts).hasSize(10);
+        assertThat(result.posts.get(0).getTitle()).isEqualTo("Xebia accueille le Mongo User Group le 2 avril");
+        assertThat(result.posts.get(1).getTitle()).isEqualTo("Logstash, ElasticSearch, Kibana – S01E00 – Analyse de vos données en temps réel cloud-ready");
     }
 
     /**
@@ -63,12 +64,12 @@ public class PostServiceTest {
         String term = "lightbend";
 
         //when
-        List<Post> posts = postService.search(term);
+        SearchResults results = postService.search(term);
 
         //Then
-        assertThat(posts).hasSize(10);
-        assertThat(posts.get(0).getTitle()).isEqualTo("Typesafe, partenaire de Xebia, devient Lightbend");
-        assertThat(posts.get(1).getTitle()).isEqualTo("Xebia organise un Hands’on Akka Java/Scala le 18 juin");
+        assertThat(results.posts).hasSize(10);
+        assertThat(results.posts.get(0).getTitle()).isEqualTo("Typesafe, partenaire de Xebia, devient Lightbend");
+        assertThat(results.posts.get(1).getTitle()).isEqualTo("Xebia organise un Hands’on Akka Java/Scala le 18 juin");
     }
 
     /**
@@ -80,7 +81,7 @@ public class PostServiceTest {
         String expectedCreator = "Jean-Louis Rigau";
 
         // When
-        List<Post> posts = postService.searchByCreator(expectedCreator);
+        List<Post> posts = postService.searchByCreator(expectedCreator).posts;
 
         // Then
         assertThat(posts.size()).isPositive();
@@ -100,8 +101,8 @@ public class PostServiceTest {
         String creatorWithoutAccent = "Seven Le Mesle";
 
         // When
-        List<Post> postsWithoutAccent = postService.searchByCreator(creatorWithoutAccent);
-        List<Post> postsWithAccent = postService.searchByCreator(expectedCreator);
+        List<Post> postsWithoutAccent = postService.searchByCreator(creatorWithoutAccent).posts;
+        List<Post> postsWithAccent = postService.searchByCreator(expectedCreator).posts;
 
         // Then
         assertThat(postsWithoutAccent.size()).isPositive();
@@ -114,12 +115,16 @@ public class PostServiceTest {
      * TODO: use aggregate
      */
     @Test
-    public void should_use_aggregate_to_find_with_category() {
-        // Given
+    public void should_use_aggregate_to_find_all_categories() {
+        String term = "java";
 
-        // When
+        //when
+        List<Aggregation> filters = postService.search(term).filters;
 
-        // Then
+        //Then
+        assertThat(filters).contains(new Aggregation("creator", Arrays.asList("Xebia France", "Xavier Bucchiotty", "Francois Sarradin", "François Sarradin", "Seven Le Mesle", "Séven Le Mesle", "Alexis Kinsella", "Bertrand Dechoux", "Julien Smadja", "Pierre Laporte")));
+        assertThat(filters).contains(new Aggregation("category", Arrays.asList("events", "front", "agile", "mobile", "java", "back", "data", "jee", "craft", "divers")));
+
     }
 
     /**

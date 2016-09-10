@@ -33,7 +33,7 @@ public class Launcher {
         get("/xebia/blog/search/:textToSearch", (request, response) -> {
             response.type("application/json");
             String textToSearch = request.params("textToSearch");
-            return postService.searchByTitle(textToSearch);
+            return postService.search(textToSearch);
         }, objectMapper::writeValueAsString);
     }
 

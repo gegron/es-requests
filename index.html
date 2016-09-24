@@ -10,7 +10,7 @@ layout: main
         à vous :
         <li><strong>Choix numéro 1 : Utiliser Elasticsearch via Docker :</strong>
     <p>
-        <code>docker run -d -p 9200:9200 -p 5601:5601 ibeauvais/elasticsearch-kibana</code>
+        <code>docker run -p 9200:9200 -p 5601:5601 ibeauvais/elasticsearch-kibana</code>
     </p>
     <p>
         Vous pouvez ensuite accéder à elasticsearch sur <a href="http://localhost:9200/">http://localhost:9200/</a> et
@@ -61,5 +61,19 @@ Requête <strong>POST</strong> {indexName}/{indexType}/{id}{% highlight json %}
     "firstname": "Dennis",
     "birthday" : "1941-09-09"
     }{% endhighlight %}
+    </p>
+    <p><li><strong>Recherche sans critère :</strong></li>
+    Requête <strong>GET</strong> {indexName}/{indexType}/_search
+
+    <p><li><strong>Recherche full text :</strong></li>
+    Requête <strong>GET</strong> {indexName}/{indexType}/_search
+    {% highlight json %}
+{
+    "query": {
+        "match": {
+            "name": "gosling"
+        }
+    }
+}{{% endhighlight %}
     </p>
 </section>

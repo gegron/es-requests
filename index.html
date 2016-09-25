@@ -39,22 +39,25 @@ layout: main
 </section>
 <section>
     <h2>2 Découverte de l'api</h2>
-    <p><li><strong>Premier document indexé :</strong></li>
-Requête <strong>POST</strong> {indexName}/{indexType}/{id}{% highlight json %}
-{
-  "name": "Lovelace",
-  "firstname": "Ada",
-  "birthday" : "1815-12-10"
-}{% endhighlight %}</p>
-    <p><li><strong>Retrouver le document par son id :</strong></li>
+    <p>
+    <li><strong>Premier document indexé :</strong></li>
+    Requête <strong>POST</strong> {indexName}/{indexType}/{id}{% highlight json %}
+    {
+    "name": "Lovelace",
+    "firstname": "Ada",
+    "birthday" : "1815-12-10"
+    }{% endhighlight %}</p>
+    <p>
+    <li><strong>Retrouver le document par son id :</strong></li>
     Requête GET {indexName}/{indexType}/{id}</p>
-    <p><li><strong>Indexer d'autres documents :</strong></li>
+    <p>
+    <li><strong>Indexer d'autres documents :</strong></li>
     {% highlight json %}
     {
     "name": "Gosling",
     "firstname": "James",
     "birthday" : "1954-05-19"
-    }{% endhighlight %}  <br/>
+    }{% endhighlight %} <br/>
     {% highlight json %}
     {
     "name": "Ritchie",
@@ -62,18 +65,57 @@ Requête <strong>POST</strong> {indexName}/{indexType}/{id}{% highlight json %}
     "birthday" : "1941-09-09"
     }{% endhighlight %}
     </p>
-    <p><li><strong>Recherche sans critère :</strong></li>
+    <p>
+    <li><strong>Recherche sans critère :</strong></li>
     Requête <strong>GET</strong> {indexName}/{indexType}/_search
 
-    <p><li><strong>Recherche full text :</strong></li>
+    <p>
+    <li><strong>Recherche full text :</strong></li>
     Requête <strong>GET</strong> {indexName}/{indexType}/_search
     {% highlight json %}
-{
+    {
     "query": {
-        "match": {
-            "name": "gosling"
-        }
+    "match": {
+    "name": "gosling"
     }
-}{{% endhighlight %}
+    }
+    }{% endhighlight %}
+    <p>
+    <li><strong>Voir le mapping :</strong></li>
+    Requête <strong>GET</strong> {indexName}/{indexType}/_mapping
     </p>
+    <p>
+    <li><strong>Supprimer un document :</strong></li>
+    Requête <strong>DELETE</strong> {indexName}/{indexType}/{id}
+    </p>
+    <li><strong>Supprimer l'index :</strong></li>
+    Requête <strong>DELETE</strong> {indexName}
+    </p>
+</section>
+<section>
+    <h2>3 Recherche d'article de blog</h2>
+    <p>Vous disposez un jeux de donnée à indexer dans elasticsearch contenant les articles du blog de Xebia. Vous allez
+        dévoir réaliser plusieurs étapes afin d'implémenter la recherche de ces articles. Un document réprésente un
+        article avec les champs suivants :
+    <li><strong>title</strong> : le titre de l'article</li>
+    <li><strong>pubDate</strong> : La date de publication de l'article</li>
+    <li><strong>creator</strong> : L'auteur de l'article</li>
+    <li><strong>category</strong> : L'article appartient à une ou plusieurs catégories</li>
+    <li><strong>category</strong> : L'article appartient à une ou plusieurs catégories</li>
+    <li><strong>description</strong> : Description courte de l'article</li>
+    <li><strong>content</strong> : Contenu complet de l'article au format html</li>
+    <br/>
+    Pour indexer tous ces documents en une étape il faut utiliser curl :<br/>
+    - Télécharger le dataset <a href="data/xebiablog.data">xebiablog.data</a><br/>
+    - Exécuter une requête bulk indexing :<br/>
+    <strong>curl -XPUT "http://{host}:9200/{indexName}/blog/_bulk" --data-binary @xebiablog.data</strong>
+
+    </p>
+    <p>
+    <strong> Début de l'exercice : </strong>
+    <li><strong>Vérifier que les documents sont correctements indexés :</strong></li>
+    Requête <strong>GET</strong> {indexName}/blog/_count
+
+    </p>
+    <p>
 </section>

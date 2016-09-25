@@ -92,30 +92,45 @@ layout: main
     Requête <strong>DELETE</strong> {indexName}
     </p>
 </section>
-<section>
-    <h2>3 Recherche d'article de blog</h2>
-    <p>Vous disposez un jeux de donnée à indexer dans elasticsearch contenant les articles du blog de Xebia. Vous allez
-        dévoir réaliser plusieurs étapes afin d'implémenter la recherche de ces articles. Un document réprésente un
-        article avec les champs suivants :
-    <li><strong>title</strong> : le titre de l'article</li>
-    <li><strong>pubDate</strong> : La date de publication de l'article</li>
-    <li><strong>creator</strong> : L'auteur de l'article</li>
-    <li><strong>category</strong> : L'article appartient à une ou plusieurs catégories</li>
-    <li><strong>category</strong> : L'article appartient à une ou plusieurs catégories</li>
-    <li><strong>description</strong> : Description courte de l'article</li>
-    <li><strong>content</strong> : Contenu complet de l'article au format html</li>
-    <br/>
-    Pour indexer tous ces documents en une étape il faut utiliser curl :<br/>
-    - Télécharger le dataset <a href="data/xebiablog.data">xebiablog.data</a><br/>
-    - Exécuter une requête bulk indexing :<br/>
-    <strong>curl -XPUT "http://{host}:9200/{indexName}/blog/_bulk" --data-binary @xebiablog.data</strong>
+<p>
+<h2>3 Recherche d'article de blog</h2>
+<p>Vous disposez un jeux de donnée à indexer dans elasticsearch contenant les articles du blog de Xebia. Vous allez
+    dévoir réaliser plusieurs étapes afin d'implémenter la recherche de ces articles. Un document réprésente un
+    article avec les champs suivants :
+<li><strong>title</strong> : le titre de l'article</li>
+<li><strong>pubDate</strong> : La date de publication de l'article</li>
+<li><strong>creator</strong> : L'auteur de l'article</li>
+<li><strong>category</strong> : L'article appartient à une ou plusieurs catégories</li>
+<li><strong>category</strong> : L'article appartient à une ou plusieurs catégories</li>
+<li><strong>description</strong> : Description courte de l'article</li>
+<li><strong>content</strong> : Contenu complet de l'article au format html</li>
+<br/>
+Pour indexer tous ces documents en une étape il faut utiliser curl :<br/>
+- Télécharger le dataset <a href="data/xebiablog.data">xebiablog.data</a><br/>
+- Exécuter une requête bulk indexing :<br/>
+<strong>curl -XPUT "http://{host}:9200/{indexName}/blog/_bulk" --data-binary @xebiablog.data</strong>
 
-    </p>
-    <p>
+</p>
+<p>
+    <strong>Vérifier que les 1199 documents sont correctements indexés :</strong>
+<strong>GET</strong> {indexName}/blog/_count
+</p>
+<p>
     <strong> Début de l'exercice : </strong>
-    <li><strong>Vérifier que les documents sont correctements indexés :</strong></li>
-    Requête <strong>GET</strong> {indexName}/blog/_count
 
-    </p>
-    <p>
+<p>
+<li><strong>Ecrire une requête qui permet de remonter les articles dont <u>le contenu</u> parle de "kodo kojo" </strong></li>
+<blockquote class = 'solution'>
+    GET xebia/blog/_search
+    {% highlight json %}{
+        "query": {
+        "match": {
+            "content": "kodo kojo"
+            }
+        }
+    }{% endhighlight %}
+</blockquote>
+</p>
+
+</p>
 </section>

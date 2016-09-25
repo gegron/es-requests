@@ -1,7 +1,9 @@
 jQuery(document).ready(function() {
-  jQuery(".solution").wrap('<div class = "spoiler"></div>')
-  jQuery(".solution").before('<button  type="button" class = "teaser">Afficher la solution</button>')
-  jQuery(".solution").hide();
+  var solutionBlock = jQuery(".solution");
+
+  solutionBlock.wrap('<div></div>');
+  solutionBlock.before('<button  type="button" class = "teaser">Solution</button>');
+  solutionBlock.hide();
   jQuery(document).on('click', '.teaser', function() {
     jQuery(this).next(".solution").slideToggle(500);
   });

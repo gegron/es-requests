@@ -160,7 +160,7 @@ GET xebia/blog/_search
 Conclusion : Les caractères html font "matcher" les termes "full" et "text" à tord.
 </blockquote>
 ---
-  __3.3 Pour solutioner le problème précédent, changer l'analyser du champ "content" afin de supprimer les caractères html :__
+  __3.3 Pour résoudre le problème précédent, changer l'analyser du champ "content" afin de supprimer les caractères html :__
   * Récupérer le mapping existant
   * ajouter un custom analyzer qui va définir : 
     * Un tokenizer de type **standard**

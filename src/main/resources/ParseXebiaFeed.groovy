@@ -19,9 +19,9 @@ def result = new IntRange(1, 24).collect {
 }
 .flatten()
         .collect {
-    JsonOutput.toJson(it)
+    "{\"index\" : {}}\n" + JsonOutput.toJson(it)
 }.join("\n")
 
-def file = new File("xebiablog.json")
+def file = new File("xebiablog.data")
 file.delete()
 file << result

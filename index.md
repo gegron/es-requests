@@ -199,6 +199,7 @@ __PUT {indexName}__
     }
 }    
 {% endhighlight %}
+
 <blockquote class = 'solution' markdown="1">
 PUT xebia
 {% highlight json %}
@@ -247,5 +248,5 @@ PUT xebia
   }
 }
 {% endhighlight %}
-
+</blockquote>
 ---

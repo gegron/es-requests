@@ -223,6 +223,9 @@ __Syntaxe :__
      }
 }
 {% endhighlight %}
+
+---
+
   * pour modifier le mapping vous devez : 
     * Supprimer l'indexe
     * Re-créér l'indexe avec le nouveau mapping :   

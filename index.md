@@ -108,7 +108,8 @@ __DELETE__ {indexName}
 ### 3. Recherche d'article de blog
 Vous disposez un jeux de donnée à indexer dans elasticsearch contenant les articles du blog de Xebia. Vous allez
 dévoir réaliser plusieurs étapes afin d'implémenter la recherche de ces articles. Un document réprésente un
-article avec les champs suivants :  
+article avec les champs suivants : 
+
 * __title__ : le titre de l'article
 * __pubDate__ : La date de publication de l'article
 * __creator__ : L'auteur de l'article

@@ -4,7 +4,7 @@ js: javascripts/main.js
 layout: main
 ---
 
-### 1 Préparation de votre environnement
+### 1. Préparation de votre environnement
 Pour réaliser les différentes étapes de ce hands-on, vous avez besoin d'un elasticsearch.  
  Plusieurs choix s'offre à vous :
 * __Choix numéro 1 : Utiliser Elasticsearch via Docker :__  
@@ -30,6 +30,7 @@ Pour effectuer des requêtes, vous allez utiliser l'api REST. Pour cela plusieur
 * __le client http de votre choix__ 
 
  ---
+ 
 ### 2. Découverte de l'api
    __2.1 Premier document indexé :__    
 Requête __POST__ {indexName}/{indexType}/{id}
@@ -172,7 +173,7 @@ Conclusion : Les caractères html font "matcher" les termes "full" et "text" à 
     * Re-indexer tous les documents (avec le cUrl) 
   * voici la requête de création d'indexe avec un mapping contenant un custom analyzer :     
 __PUT {indexName}__   
-``` json
+{% highlight json %}
 {
     "mappings" : {
         "blog" : {
@@ -197,7 +198,7 @@ __PUT {indexName}__
         }
     }
 }    
-```
+{% endhighlight %}
 <blockquote class = 'solution' markdown="1">
 PUT xebia
 {% highlight json %}

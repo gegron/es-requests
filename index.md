@@ -117,6 +117,7 @@ article avec les champs suivants :
 * __description__ : Description courte de l'article
 * __content__ : Contenu complet de l'article au format html
   
+---
   __3.1 Création de l'index__  
 Créér l'indexe pour recevoir les documents avec le mapping ci-dessous, ce mapping est équivalent au mapping par défaut généré par Elasticsearch mais sera plus facilement modifiable par la suite (Déclaration d'un premier analyzer).
  Pour créér l'indexe avec ce mapping :  
@@ -169,6 +170,7 @@ __PUT__ {indexName}
 ---
   __3.2 Indéxer les documents__  
 Pour indexer tous ces documents en une étape vous allez utiliser curl :  
+
  * Télécharger le dataset [data/xebiablog.data](xebiablog.data)
  * Exécuter une requête bulk indexing :  
   __curl -XPUT "http://{host}:9200/{indexName}/blog/_bulk" --data-binary @xebiablog.data__

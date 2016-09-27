@@ -176,7 +176,7 @@ Pour indexer tous ces documents en une étape vous allez utiliser curl :
  * Exécuter une requête bulk indexing :  
   __curl -XPUT "http://{host}:9200/xebia/blog/_bulk" --data-binary @xebiablog.data__
   
-  __Vérifier que les 1199 documents sont correctements indexés :__  
+  __Vérifier que les 1198 documents sont correctements indexés :__  
   __GET__ xebia/blog/_count  
 
   __3.3 Ecrire une requête qui permet de remonter les articles dont <u>le contenu</u> parle de "kodo kojo"__

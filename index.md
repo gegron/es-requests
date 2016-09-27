@@ -25,7 +25,7 @@ Exemple : Au lieu de faire GET http://ip:9200/myIndex/_search, je fais GET
             http://ip:9200/beauvais-myIndex/_search
 
 Pour effectuer des requêtes, vous allez utiliser l'api REST. Pour cela plusieurs choix également :  
-* __Utiliser sense :__ application kibana avec auto-complétion et formatage des requêtes
+* __Utiliser sense :__ application kibana avec auto-complétion et formatage des requêtes  
 * __Utiliser cUrl__ 
 * __le client http de votre choix__ 
 

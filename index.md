@@ -34,7 +34,7 @@ Pour effectuer des requêtes, vous allez utiliser l'api REST. Pour cela plusieur
  
 ### 2. Découverte de l'api
    __2.1 Premier document indexé :__    
-Requête __POST__ {indexName}/{indexType}/{id}
+Requête __POST__ programmer/person/1
 {% highlight json %}
 {
     "name": "Lovelace",
@@ -44,7 +44,7 @@ Requête __POST__ {indexName}/{indexType}/{id}
 {% endhighlight %}  
 ---  
   __2.2 Retrouver le document par son id :__  
-Requête __GET__ {indexName}/{indexType}/{id}  
+Requête __GET__ programmer/person/1  
     
   __2.3 Indexer d'autres documents :__  
 {% highlight json %}
@@ -64,10 +64,10 @@ Requête __GET__ {indexName}/{indexType}/{id}
 {% endhighlight %}
 ---
   __2.4 Recherche sans critère :__  
-__GET__ {indexName}/{indexType}/_search
+__GET__ programmer/person/_search
 
   __2.5 Recherche full text :__  
-__GET__ {indexName}/{indexType}/_search
+__GET__ programmer/person/_search
 {% highlight json %}
 {
     "query": {
@@ -79,7 +79,7 @@ __GET__ {indexName}/{indexType}/_search
 {% endhighlight %}
 ---
   __2.6 Recherche full text avec highlighting (mise en surbrillance du terme qui "match" le texte de recherche) :__
-__GET__ {indexName}/{indexType}/_search
+__GET__ programmer/person/_search
 {% highlight json %}
 {
     "query": {
@@ -96,13 +96,13 @@ __GET__ {indexName}/{indexType}/_search
 {% endhighlight %}
 ---    
   __2.7 Voir le mapping :__  
-__GET__ {indexName}/{indexType}/_mapping
+__GET__ programmer/person/_mapping
   
   __2.8 Supprimer un document :__  
-__DELETE__ {indexName}/{indexType}/{id}
+__DELETE__ programmer/person/{id}
       
   __2.9 Supprimer l'index :__  
-__DELETE__ {indexName}
+__DELETE__ programmer
 
 ---
 
@@ -123,7 +123,7 @@ article avec les champs suivants :
 Créér l'indexe pour recevoir les documents avec le mapping ci-dessous, ce mapping est équivalent au mapping par défaut généré par Elasticsearch mais sera plus facilement modifiable par la suite (Déclaration d'un premier analyzer).
  Pour créér l'indexe avec ce mapping :  
     
-__PUT__ {indexName}  
+__PUT__ xebia
 {% highlight json %}
 {
     "mappings": {
@@ -174,10 +174,10 @@ Pour indexer tous ces documents en une étape vous allez utiliser curl :
 
  * Télécharger le dataset [data/xebiablog.data](xebiablog.data)
  * Exécuter une requête bulk indexing :  
-  __curl -XPUT "http://{host}:9200/{indexName}/blog/_bulk" --data-binary @xebiablog.data__
+  __curl -XPUT "http://{host}:9200/xebia/blog/_bulk" --data-binary @xebiablog.data__
   
   __Vérifier que les 1199 documents sont correctements indexés :__  
-  __GET__ {indexName}/blog/_count  
+  __GET__ xebia/blog/_count  
 
   __3.3 Ecrire une requête qui permet de remonter les articles dont <u>le contenu</u> parle de "kodo kojo"__
 <blockquote class = 'solution' markdown="1">

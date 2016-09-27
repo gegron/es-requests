@@ -6,7 +6,7 @@ layout: main
 
 ### 1. Préparation de votre environnement
 Pour réaliser les différentes étapes de ce hands-on, vous avez besoin d'un elasticsearch.  
- Plusieurs choix s'offre à vous :
+ Plusieurs choix s'offre à vous :  
 * __Choix numéro 1 : Utiliser Elasticsearch via Docker :__  
 `docker run -p 9200:9200 -p 5601:5601 ibeauvais/elasticsearch-kibana`
     

@@ -1,0 +1,74 @@
+{
+    "AWSTemplateFormatVersion" : "2010-09-09",
+    "Parameters" : {
+        "InstanceCount" : {
+            "Description" : "Number of ES Nodes",
+            "Type": "Number",
+            "Default":2
+        },
+        "InstanceType" : {
+            "Description" : "Instance type",
+            "Type": "String",
+            "Default":"t2.medium.elasticsearch",
+            "AllowedValues" : ["t2.medium.elasticsearch", "r3.large.elasticsearch"]
+        },
+        "MasterInstanceType" : {
+            "Description" : "Master Instance type",
+            "Type": "String",
+            "Default":"t2.micro.elasticsearch",
+            "AllowedValues" : ["t2.micro.elasticsearch", "t2.small.elasticsearch", "m3.medium.elasticsearch"]
+        },
+        "MasterInstanceCount" : {
+            "Description" : "Number of Master Node",
+            "Type": "Number",
+            "Default":2
+        }
+    },
+    "Resources" : {
+        "ElasticsearchDomain": {
+            "Type": "AWS::Elasticsearch::Domain",
+            "DeletionPolicy" : "Retain",
+            "Properties": {
+                "DomainName" : "xebicon-handson-es",
+                "ElasticsearchVersion" : "2.3",
+                "ElasticsearchClusterConfig": {
+                    "DedicatedMasterEnabled": "true",
+                    "InstanceCount": {"Ref" : "InstanceCount"},
+                    "ZoneAwarenessEnabled": "true",
+                    "InstanceType": {"Ref" : "InstanceType"},
+                    "DedicatedMasterType": {"Ref" : "MasterInstanceType"},
+                    "DedicatedMasterCount": {"Ref" : "MasterInstanceCount"}
+                },
+                "EBSOptions": {
+                    "EBSEnabled": "true",
+                    "Iops": 0,
+                    "VolumeSize": 35,
+                    "VolumeType": "gp2"
+                },
+                "SnapshotOptions": {
+                    "AutomatedSnapshotStartHour": "0"
+                },
+                "AccessPolicies": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "AWS": [
+                                    "*"
+                                ]
+                            },
+                            "Action": [
+                                "es:*"
+                            ],
+                            "Resource": "arn:aws:es:eu-west-1:010154155802:domain/xebicon-handson-es/*"
+                        }
+                    ]
+                },
+                "AdvancedOptions": {
+                    "rest.action.multi.allow_explicit_index": "true"
+                }
+            }
+        }
+    }
+}

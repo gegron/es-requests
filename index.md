@@ -163,7 +163,10 @@ __PUT__ xebia
                     "char_filter": [
                     ]
                 }
-            }
+            },
+             "filter": {},
+             "tokenizer": {},
+             "char_filter": {}
         }
     }
 }
@@ -276,7 +279,92 @@ __PUT__ xebia
             " html_strip"
           ]
         }
+      },
+        "filter": {},
+        "tokenizer": {},
+        "char_filter": {}
+    }
+  }
+}
+{% endhighlight %}
+__curl -XPUT "http://{host}:9200/{indexName}/blog/_bulk" --data-binary @xebiablog.data__
+</blockquote>
+---  
+
+  __3.6 L'entreprise Typesafe a changé de nom pour Lightbend. Problème les recherches sur "lightbend" ne remontent que 3 résultats. Modifier le mapping afin que toutes les recherches sur un des noms remontent les résultats associés aux 2 noms d'entreprise.__   
+  Pour cela ajouter un _filter_ de type synonym
+
+__Syntaxe :__   
+{% highlight json %}
+{
+    "{filterName}": {
+          "type": "synonym",
+          "synonyms": [
+            "term1, term2 => synonym1, synonym2"
+          ]
+     }
+}        
+{% endhighlight %}
+
+---
+
+
+<blockquote class = 'solution' markdown="1">
+__DELETE__ xebia  
+__PUT__ xebia
+{% highlight json %}
+{
+  "mappings": {
+    "blog": {
+      "properties": {
+        "category": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string",
+          "analyzer": "my_analyzer"
+        },
+        "creator": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "pubDate": {
+          "type": "date",
+          "format": "strict_date_optional_time||epoch_millis"
+        },
+        "title": {
+          "type": "string"
+        }
       }
+    }
+  },
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "mySynonym"
+          ],
+          "char_filter": [
+            " html_strip"
+          ]
+        }
+      },
+      "filter": {
+        "mySynonym": {
+          "type": "synonym",
+          "synonyms": [
+            "lightbend, typesafe => lightbend, typesafe"
+          ]
+        }
+      },
+      "tokenizer": {},
+      "char_filter": {}
     }
   }
 }

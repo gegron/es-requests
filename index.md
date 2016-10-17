@@ -372,3 +372,96 @@ __PUT__ xebia
 __curl -XPUT "http://{host}:9200/{indexName}/blog/_bulk" --data-binary @xebiablog.data__
 </blockquote>
 ---
+
+  __3.7 Suppression des posts trop anciens :__   
+  Les recherchent peuvent remonter des résultats de 2011. Utilisez la recherche full text conjointement avec un filtre pour ne pas remonter les documents plus ancien de 2 an.      
+Pour cela utilisez une **bool** query  et un **range** filter  
+__Syntaxe :__   
+{% highlight json %}
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "FIELD": "TEXT"
+          }
+        }
+      ],
+      "filter": {
+        "range": {
+          "FIELD": {
+            "gte": 10,
+            "lte": 20
+          }
+        }
+      }
+    }
+  }
+}       
+{% endhighlight %}
+
+<blockquote class = 'solution' markdown="1">
+GET xebia/blog/_search
+{% highlight json %}
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "content": "java"
+          }
+        }
+      ],
+      "filter": {
+        "range": {
+          "pubDate": {
+            "gte": "now-2y"
+          }
+        }
+      }
+    }
+  }
+} 
+{% endhighlight %}
+_
+</blockquote>
+---
+
+  __3.8 Requête sur plusieurs champs :__   
+  Lorsqu'on fait une recherche de type match query sur "javascript", les résultats ne sont pas assez ciblés sur le sujet. Afin de rendre le résultat plus pertinent modifier la requête précédente pour remplacer la requête de type *match* par une requête de type *multi_match* 
+  afin de pouvoir exécuter la même requête conjointement sur le champ "content" et le champ "title".    
+  
+
+---
+
+
+<blockquote class = 'solution' markdown="1">
+GET xebia/blog/_search
+{% highlight json %}
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "multi_match": {
+            "query": "javascript",
+            "fields": ["content","title"]
+          }
+        }
+      ],
+      "filter": {
+        "range": {
+          "pubDate": {
+            "gte": "now-2y"
+          }
+        }
+      }
+    }
+  }
+}
+{% endhighlight %}
+_
+</blockquote>
+---

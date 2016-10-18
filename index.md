@@ -499,7 +499,8 @@ GET xebia/_suggest
 }  
 {% endhighlight %}
 
-Cette requête doit pouvoir remonter les titres de recherche sur d, do, doc, dock, docke, docker. Ainsi que l'id du document correspondant.
+Cette requête doit pouvoir remonter les titres de recherche sur d, do, doc, dock, docke, docker. Ainsi que l'id du document correspondant.  
+Ce mapping permet d'analyser le texte et le stocker dans une structure de donnée optimisée afin de remonter efficacement les suggestions sans passer par une __prefix__ query moins optimisée.
 
 ---
 

@@ -179,8 +179,13 @@ Pour indexer tous ces documents en une étape vous allez utiliser curl :
  * Exécuter une requête bulk indexing :  
   __curl -XPUT "http://{host}:9200/xebia/blog/_bulk" --data-binary @xebiablog.data__
   
-  __Vérifier que les 1198 documents sont correctements indexés :__  
+  __Vérifier que les 1197 documents sont correctements indexés :__  
   __GET__ xebia/blog/_count  
+  
+Le fichier xebiablog.data contient l'ensemble des documents à indexer au format :   
+{"index" : {"_id":"2"}}  
+{"title":"Scrum pour la Recherche","pubDate":"2016-09-19T13:39:42"  ...}        
+[...]  
 
   __3.3 Ecrire une requête qui permet de remonter les articles dont <u>le contenu</u> parle de "kodo kojo"__
 <blockquote class = 'solution' markdown="1">
@@ -463,5 +468,118 @@ GET xebia/blog/_search
 }
 {% endhighlight %}
 _
+</blockquote>
+---
+__3.9 Suggestion :__   
+  Nous souhaitons être capable de faire de la suggestion sur la titre des posts dès la première lettre saisie. Pour cela, vous allez utiliser l'api __Completion suggester :__  
+  -  Ajoutez un champ "suggest" au mapping de type __completion__ et avec comme propriété __"payloads": true__
+  - Utilisez le fichier [data/xebiablogWithSuggest.data](xebiablogWithSuggest.data) pour l'indéxation. Ce fichier contient les mêmes documents mais avec le champ suggest au le format suivant : 
+{% highlight json %}
+  {
+    "suggest": {
+            "input": ["<title>"],
+            "payload": {
+                 "blogId": "<documentId>"
+            }
+    }
+  }
+{% endhighlight %}
+---  
+  - Effectuer une requête de type suggest   
+__Syntaxe :__
+GET xebia/_suggest
+{% highlight json %}      
+{
+  "<name>":{
+    "text" : "<text_to_search>",
+        "completion" : {
+            "field" : "<suggest_field_name>"
+    }
+  }
+}  
+{% endhighlight %}
+
+Cette requête doit pouvoir remonter les titres de recherche sur d, do, doc, dock, docke, docker. Ainsi que l'id du document correspondant.
+
+---
+
+
+<blockquote class = 'solution' markdown="1">
+DELETE xebia         
+PUT xebia  
+{% highlight json %}   
+{
+  "mappings": {
+    "blog": {
+      "properties": {
+        "category": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string",
+          "analyzer": "my_analyzer"
+        },
+        "creator": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "pubDate": {
+          "type": "date",
+          "format": "strict_date_optional_time||epoch_millis"
+        },
+        "title": {
+          "type": "string"
+        },
+        "suggest": {
+          "type": "completion",
+          "payloads": true
+        }
+      }
+    }
+  },
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "mySynonym"
+          ],
+          "char_filter": [
+            " html_strip"
+          ]
+        }
+      },
+      "filter": {
+        "mySynonym": {
+          "type": "synonym",
+          "synonyms": [
+            "lightbend, typesafe => lightbend, typesafe"
+          ]
+        }
+      },
+      "tokenizer": {},
+      "char_filter": {}
+    }
+  }
+}
+ {% endhighlight %}
+curl -XPUT "localhost:9200/xebia/blog/_bulk" --data-binary @xebiablogWithSuggest.data
+
+GET xebia/_suggest
+{% highlight json %}   
+{
+  "title-suggest":{
+    "text" : "do",
+        "completion" : {
+            "field" : "suggest"
+        }
+  }
+}
+{% endhighlight %}
 </blockquote>
 ---

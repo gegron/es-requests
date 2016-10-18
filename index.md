@@ -471,9 +471,9 @@ _
 </blockquote>
 ---
 __3.9 Suggestion :__   
-  Nous souhaitons être capable de faire de la suggestion sur la titre des posts dès la première lettre saisie. Pour cela, vous allez utiliser l'api __Completion suggester :__  
-  -  Ajoutez un champ "suggest" au mapping de type __completion__ et avec comme propriété __"payloads": true__
-  - Utilisez le fichier [data/xebiablogWithSuggest.data](xebiablogWithSuggest.data) pour l'indéxation. Ce fichier contient les mêmes documents mais avec le champ suggest au le format suivant : 
+  Nous souhaitons être capable de faire de la suggestion sur la titre des posts dès la première lettre saisie. Pour cela, vous allez utiliser l'api __Completion suggester :__    
+  -  Ajoutez un champ "suggest" au mapping de type __completion__ et avec comme propriété __"payloads": true__  
+  - Utilisez le fichier [data/xebiablogWithSuggest.data](xebiablogWithSuggest.data) pour l'indéxation. Ce fichier contient les mêmes documents mais avec le champ suggest au le format suivant :   
 {% highlight json %}
   {
     "suggest": {

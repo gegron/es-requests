@@ -584,3 +584,20 @@ GET xebia/_suggest
 {% endhighlight %}
 </blockquote>
 ---
+__3.10 Suggestion fuzzy:__   
+  Problème l'api de suggestion ne remonte pas de résultat si la personne qui recherche se trompe dans la saisie du texte.   
+   Modifiez la requête de suggestion afin de pouvoir remonter les suggestions liées à Docker si l'on saisie "Doker".  
+   Pour cela, ajoutez le paramètre __"fuzzy":{}__ à la requête.
+<blockquote class = 'solution' markdown="1">
+{% highlight json %}   
+{
+  "title-suggest":{
+    "text" : "doker",
+        "completion" : {
+            "field" : "suggest",
+            "fuzzy" : { }
+        }
+  }
+}
+{% endhighlight %}
+</blockquote>

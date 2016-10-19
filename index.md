@@ -602,3 +602,103 @@ __3.10 Suggestion fuzzy:__
 }
 {% endhighlight %}
 </blockquote>
+__3.11 Aggregations:__   
+  Nous souhaitons maintenant ramener toutes les catégories possibles pour un blog. Pour cela utilisez une aggrégations de type __terms__.
+
+  __Syntaxe :__  
+  GET xebia/blog/_search
+  {% highlight json %}      
+  { "size": 0, 
+    "aggregations": {
+      "<aggregation_name>": {
+        "<aggregation_type>": {
+          "field": "<field_name>"
+        }
+      }
+    }
+  }
+{% endhighlight %}  
+            
+---     
+
+__Attention__ : On doit remonter les terms "exact", pour cela vous allez devoir modifier le mapping.   
+  
+<blockquote class = 'solution' markdown="1">
+DELETE xebia     
+PUT xebia     
+{% highlight json %}   
+{
+  "mappings": {
+    "blog": {
+      "properties": {
+        "category": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "content": {
+          "type": "string",
+          "analyzer": "my_analyzer"
+        },
+        "creator": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "pubDate": {
+          "type": "date",
+          "format": "strict_date_optional_time||epoch_millis"
+        },
+        "title": {
+          "type": "string"
+        },
+        "suggest": {
+          "type": "completion",
+          "payloads": true
+        }
+      }
+    }
+  },
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "mySynonym"
+          ],
+          "char_filter": [
+            " html_strip"
+          ]
+        }
+      },
+      "filter": {
+        "mySynonym": {
+          "type": "synonym",
+          "synonyms": [
+            "lightbend, typesafe => lightbend, typesafe"
+          ]
+        }
+      },
+      "tokenizer": {},
+      "char_filter": {}
+    }
+  }
+}
+{% endhighlight %}
+GET xebia/blog/_search
+{% highlight json %}   
+{ "size": 0, 
+  "aggregations": {
+    "by_category": {
+      "terms": {
+        "field": "category",
+        "size": 100
+      }
+    }
+  }
+}
+{% endhighlight %}
+</blockquote>

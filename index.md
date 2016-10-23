@@ -702,3 +702,89 @@ GET xebia/blog/_search
 }
 {% endhighlight %}
 </blockquote>
+---   
+
+### 4. Recherche appartement
+L'agence X-immobilier vient de créér son site internet de recherche de bien immobilier en Île de France.
+Vous disposez d'un jeux de donnée à indéxer dans elasticsearch. Et vous devez écrire les requêtes et le mapping selon les besoins.
+Vous disposez des champs suivants : 
+
+* __price__ : Le prix en euro
+* __nbOfRoom__ : Nombre de pièce
+* __surface__ : La surface en m²
+* __address__ : un object contenant l'adresse :  
+    * __street__ : le numéro et la voie
+    * __postalCode__ : le Code postal
+    * __city__ : La ville
+* __localisation__ : un object contenant les coordonnées géoloc
+    * __lat__ : la latitude
+    * __lon__ : la longitude    
+    
+Voici un exemple : 
+{% highlight json %}   
+{
+    "price": 136920,
+    "nbOfRoom": 4,
+    "surface": 56,
+    "address": {
+        "street": "21 BOULEVARD DE LA MALIBRAN",
+        "postalCode": "77680",
+        "city": "ROISSY EN BRIE"
+    },
+    "localisation": {
+        "lat": 48.794399999999996,
+        "lon": 2.64448
+    }
+}{% endhighlight %}
+
+__4.1 Création de l'index__  
+Créér l'indexe pour recevoir les documents avec le mapping ci-dessous.
+Le mapping n'aura plus besoin d'être modifier. Noter le mapping du champ localisation
+     
+__PUT__ x-immobilier
+{% highlight json %}
+{
+     "mappings": {
+       "apartment": {
+         "properties": {
+           "address": {
+             "properties": {
+               "city": {
+                 "type": "string"
+               },
+               "postalCode": {
+                 "type": "string"
+               },
+               "street": {
+                 "type": "string"
+               }
+             }
+           },
+           "localisation": {
+              "type": "geo_point"
+           },
+           "nbOfRoom": {
+             "type": "long"
+           },
+           "price": {
+             "type": "long"
+           },
+           "surface": {
+             "type": "long"
+           }
+         }
+       }
+     }
+   }
+{% endhighlight %}
+---
+  __4.2 Indéxer les documents__  
+Pour indexer tous ces documents en une étape vous allez utiliser curl :  
+
+ * Télécharger le dataset [data/apartment.data](data/apartment.data)
+ * Exécuter une requête bulk indexing :  
+  `curl -XPUT http://{host}:9200/x-immobilier/apartment/_bulk --data-binary @apartment.data`
+  
+ __Vérifier que les 3991 documents sont correctements indexés :__  
+ __GET__ x-immobilier/_count  
+  

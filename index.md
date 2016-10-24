@@ -706,8 +706,8 @@ GET xebia/blog/_search
 
 ### 4. Recherche appartement
 L'agence X-immobilier vient de créér son site internet de recherche de bien immobilier en Île de France.
-Vous disposez d'un jeux de donnée à indéxer dans elasticsearch. Et vous devez écrire les requêtes et le mapping selon les besoins.
-Vous disposez des champs suivants : 
+Vous disposez d'un jeux de donnée à indéxer dans elasticsearch contenant des appartements à vendre 
+avec les champs suivants : 
 
 * __price__ : Le prix en euro
 * __nbOfRoom__ : Nombre de pièce
@@ -786,5 +786,67 @@ Pour indexer tous ces documents en une étape vous allez utiliser curl :
   `curl -XPUT http://{host}:9200/x-immobilier/apartment/_bulk --data-binary @apartment.data`
   
  __Vérifier que les 3991 documents sont correctements indexés :__  
- __GET__ x-immobilier/_count  
-  
+ __GET__ x-immobilier/_count
+   
+__4.3 Filtre par rapport à la distance depuis un point__  
+Pour les besoins du site, il faut être capable de rechercher les appartements à proximité de certains points d'interêts.  
+Ecrire une requête permettant de remontrer les appartements se trouvant à moins de 500m du  
+ métro Cadet lat: 48.876135, "lon": 2.344876 en utilisant un filtre de type __geo_distance__
+
+<blockquote class = 'solution' markdown="1">
+
+GET x-immobilier/apartment/_search
+{% highlight json %}   
+{
+  "query": {
+    "bool": {
+      "filter": {
+        "geo_distance": {
+          "distance": "500m",
+          "localisation": {
+            "lat": 48.876135,
+            "lon": 2.344876
+          }
+        }
+      }
+    }
+  }
+}
+{% endhighlight %}
+</blockquote>
+__4.4 Tri par rapport à la distance depuis un point__  
+La requête précédente permet aux utilisateurs de remonter les adresses à moins de 500m, cependant les utilisateurs souhaiteraient voir en priorité les apparements les plus proche.
+Modifier la requête pour ajouter le tri par ___geo_distance__
+
+<blockquote class = 'solution' markdown="1">
+
+GET x-immobilier/apartment/_search
+{% highlight json %}   
+{
+  "query": {
+    "bool": {
+      "filter": {
+        "geo_distance": {
+          "distance": "500m",
+          "localisation": {
+            "lat": 48.876135,
+            "lon": 2.344876
+          }
+        }
+      }
+    }
+  },
+  "sort": [
+    {
+      "_geo_distance": {
+        "localisation": {
+          "lat": 48.876135,
+          "lon": 2.344876
+        },
+        "order": "asc"
+      }
+    }
+  ]
+}
+{% endhighlight %}
+</blockquote>

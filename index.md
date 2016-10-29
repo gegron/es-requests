@@ -33,6 +33,8 @@ Pour effectuer des requêtes, vous allez utiliser l'api REST. Pour cela plusieur
  ---
  
 ### 2. Découverte de l'api
+###### Attention,  pour cette partie, si vous utilisez le elasticsearch en ligne n'oubliez pas de changer le nom d'index __'programmer'__ en __'votre-nom-programmer'__ ######   
+
    __2.1 Premier document indexé :__    
 Requête __POST__ programmer/person/1
 {% highlight json %}
@@ -41,12 +43,18 @@ Requête __POST__ programmer/person/1
     "firstname": "Ada",
     "birthday" : "1815-12-10"
 }
-{% endhighlight %}  
+{% endhighlight %}   
+  
 ---  
+   
+- **programmer** est le nom de l'indexe
+- **person** est le type de document
+- **1** est l'id   
+   
   __2.2 Retrouver le document par son id :__  
 Requête __GET__ programmer/person/1  
     
-  __2.3 Indexer d'autres documents :__  
+  __2.3 Indexer d'autres documents (Avec les id 2 et 3):__  
 {% highlight json %}
 {
     "name": "Gosling",
@@ -119,9 +127,12 @@ article avec les champs suivants :
 * __content__ : Contenu complet de l'article au format html
   
 ---
+
+###### Attention, pour cet partie, si vous utilisez le elasticsearch en ligne n’oubliez pas de changer le nom d’index __‘xebia’__ en __‘votre-nom-xebia’__ ######
+
   __3.1 Création de l'index__  
 Créér l'indexe pour recevoir les documents avec le mapping ci-dessous, ce mapping est équivalent au mapping par défaut généré par Elasticsearch mais sera plus facilement modifiable par la suite (Déclaration d'un premier analyzer).
- Pour créér l'indexe avec ce mapping :  
+ Pour créér l'indexe 'xebia' avec ce mapping :  
     
 __PUT__ xebia
 {% highlight json %}
@@ -177,7 +188,7 @@ Pour indexer tous ces documents en une étape vous allez utiliser curl :
 
  * Télécharger le dataset [data/xebiablog.data](xebiablog.data)
  * Exécuter une requête bulk indexing :  
-  __curl -XPUT "http://{host}:9200/xebia/blog/_bulk" --data-binary @xebiablog.data__
+  `curl -XPUT http://{host}:9200/{indexName}/blog/_bulk --data-binary @xebiablog.data`
   
   __Vérifier que les 1197 documents sont correctements indexés :__  
   __GET__ xebia/blog/_count  
@@ -187,7 +198,7 @@ Le fichier xebiablog.data contient l'ensemble des documents à indexer au format
 {"title":"Scrum pour la Recherche","pubDate":"2016-09-19T13:39:42"  ...}        
 [...]  
 
-  __3.3 Ecrire une requête qui permet de remonter les articles dont <u>le contenu</u> parle de "kodo kojo"__
+  __3.3 En vous inspirant de l'exercice     2.5, ecrire une requête qui permet de remonter les articles dont <u>le contenu</u> parle de "kodo kojo"__
 <blockquote class = 'solution' markdown="1">
 __GET__ xebia/blog/_search
 {% highlight json %}
@@ -716,7 +727,7 @@ avec les champs suivants :
     * __street__ : le numéro et la voie
     * __postalCode__ : le Code postal
     * __city__ : La ville
-* __localisation__ : un object contenant les coordonnées géoloc
+* __location__ : un object contenant les coordonnées géoloc
     * __lat__ : la latitude
     * __lon__ : la longitude    
     
@@ -731,7 +742,7 @@ Voici un exemple :
         "postalCode": "77680",
         "city": "ROISSY EN BRIE"
     },
-    "localisation": {
+    "location": {
         "lat": 48.794399999999996,
         "lon": 2.64448
     }
@@ -739,7 +750,7 @@ Voici un exemple :
 
 __4.1 Création de l'index__  
 Créér l'indexe pour recevoir les documents avec le mapping ci-dessous.
-Le mapping n'aura plus besoin d'être modifier. Noter le mapping du champ localisation
+Le mapping n'aura plus besoin d'être modifier. Noter le mapping du champ location
      
 __PUT__ x-immobilier
 {% highlight json %}
@@ -760,7 +771,7 @@ __PUT__ x-immobilier
                }
              }
            },
-           "localisation": {
+           "location": {
               "type": "geo_point"
            },
            "nbOfRoom": {
@@ -803,7 +814,7 @@ GET x-immobilier/apartment/_search
       "filter": {
         "geo_distance": {
           "distance": "500m",
-          "localisation": {
+          "location": {
             "lat": 48.876135,
             "lon": 2.344876
           }
@@ -828,7 +839,7 @@ GET x-immobilier/apartment/_search
       "filter": {
         "geo_distance": {
           "distance": "500m",
-          "localisation": {
+          "location": {
             "lat": 48.876135,
             "lon": 2.344876
           }
@@ -839,7 +850,7 @@ GET x-immobilier/apartment/_search
   "sort": [
     {
       "_geo_distance": {
-        "localisation": {
+        "location": {
           "lat": 48.876135,
           "lon": 2.344876
         },

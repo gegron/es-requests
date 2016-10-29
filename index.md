@@ -188,7 +188,7 @@ Pour indexer tous ces documents en une étape vous allez utiliser curl :
 
  * Télécharger le dataset [data/xebiablog.data](xebiablog.data)
  * Exécuter une requête bulk indexing :  
-  `curl -XPUT http://{host}:9200/{indexName}/blog/_bulk --data-binary @xebiablog.data`
+  `curl -XPUT http://{host}:9200/{indexName}/blog/_bulk --data-binary @xebiablog.data
   
   __Vérifier que les 1197 documents sont correctements indexés :__  
   __GET__ xebia/blog/_count  
@@ -232,8 +232,8 @@ GET xebia/blog/_search
 Conclusion : Les caractères html font "matcher" les termes "full" et "text" à tord.
 </blockquote>
 ---
-  __3.5 Pour résoudre le problème précédent, changer l'analyser du champ 'content' afin de supprimer les caractères html :__
-Pour cela modifier la mapping afin d'utiliser le token filter __html_strip__ dans un 'custom analyzer' et déclarer le champ __'content'__ comme utilisant cet analyzer.  
+  __3.5 Pour résoudre le problème précédent, changer l'analyzer du champ 'content' afin de supprimer les caractères html :__  
+Pour cela modifier la mapping afin d'utiliser le char filter __html_strip__ dans le 'custom analyzer' __my_analyzer__ et déclarer le champ __'content'__ comme utilisant cet analyzer.  
 __Syntaxe :__ 
 {% highlight json %}
 {
@@ -307,8 +307,8 @@ __curl -XPUT "http://{host}:9200/{indexName}/blog/_bulk" --data-binary @xebiablo
 </blockquote>
 ---  
 
-  __3.6 L'entreprise Typesafe a changé de nom pour Lightbend. Problème les recherches sur "lightbend" ne remontent que 3 résultats. Modifier le mapping afin que toutes les recherches sur un des noms remontent les résultats associés aux 2 noms d'entreprise.__   
-  Pour cela ajouter un _filter_ de type synonym
+  __3.6 L'entreprise Typesafe a changé de nom pour Lightbend. Problème, les recherches sur "lightbend" ne remontent que 3 résultats. Modifier le mapping afin que toutes les recherches sur un des noms remontent les résultats associés aux 2 noms d'entreprise.__   
+  Pour cela declarez un _filter_ de type synonym dans la partie `"filter": {},`du mapping et utilisez le dans l'analyzer my_analyzer 
 
 __Syntaxe :__   
 {% highlight json %}
@@ -390,7 +390,7 @@ __curl -XPUT "http://{host}:9200/{indexName}/blog/_bulk" --data-binary @xebiablo
 ---
 
   __3.7 Suppression des posts trop anciens :__   
-  Les recherchent peuvent remonter des résultats de 2011. Utilisez la recherche full text conjointement avec un filtre pour ne pas remonter les documents plus ancien de 2 an.      
+  Les recherchent peuvent remonter des résultats de 2011. Utilisez la recherche full text conjointement avec un filtre pour ne pas remonter les documents plus anciens de 2 ans.      
 Pour cela utilisez une **bool** query  et un **range** filter  
 __Syntaxe :__   
 {% highlight json %}
@@ -400,15 +400,15 @@ __Syntaxe :__
       "must": [
         {
           "match": {
-            "FIELD": "TEXT"
+            "{field_name}": "{search_value}"
           }
         }
       ],
       "filter": {
         "range": {
-          "FIELD": {
-            "gte": 10,
-            "lte": 20
+          "{field_name}": {
+            "gte": "{date_min}",
+            "lte": "{date_max}"
           }
         }
       }
@@ -446,7 +446,7 @@ _
 ---
 
   __3.8 Requête sur plusieurs champs :__   
-  Lorsqu'on fait une recherche de type match query sur "javascript", les résultats ne sont pas assez ciblés sur le sujet. Afin de rendre le résultat plus pertinent modifier la requête précédente pour remplacer la requête de type *match* par une requête de type *multi_match* 
+  En gardant la requête précédente mais sur le texte "javascript", les résultats ne sont pas assez ciblés sur le sujet. Afin de rendre le résultat plus pertinent modifier la requête précédente pour remplacer la requête de type **match** par une requête de type **multi_match** 
   afin de pouvoir exécuter la même requête conjointement sur le champ "content" et le champ "title".    
   
 
@@ -482,14 +482,15 @@ _
 </blockquote>
 ---
 __3.9 Suggestion :__   
-  Nous souhaitons être capable de faire de la suggestion sur la titre des posts dès la première lettre saisie. Pour cela, vous allez utiliser l'api __Completion suggester :__    
+  Nous souhaitons être capable de faire de la suggestion sur le titre des posts dès la première lettre saisie. Pour cela, vous allez utiliser l'api __Completion suggester :__    
   
-  -  Ajoutez un champ "suggest" au mapping de type __completion__ et avec comme propriété __"payloads": true__  
-  - Utilisez le fichier [data/xebiablogWithSuggest.data](xebiablogWithSuggest.data) pour l'indéxation. Ce fichier contient les mêmes documents mais avec le champ suggest au le format suivant :   
+  -  Ajoutez un champ "suggest" au mapping de type __completion__ et avec comme propriété __"payloads": true__.   
+  Ce champ va contenir le texte pour la suggestion mais sera indexé dans une structure optimisée pour faire de la recherche rapide sur du texte.  
+  - Utilisez le fichier [data/xebiablogWithSuggest.data](xebiablogWithSuggest.data) pour l'indéxation. Ce fichier contient les mêmes documents mais avec le champ suggest au format suivant :   
 {% highlight json %}
   {
     "suggest": {
-            "input": ["<title>"],
+            "input": ["suggest_text>"],
             "payload": {
                  "blogId": "<documentId>"
             }
@@ -511,8 +512,7 @@ GET xebia/_suggest
 }  
 {% endhighlight %}
 
-Cette requête doit pouvoir remonter les titres de recherche sur d, do, doc, dock, docke, docker. Ainsi que l'id du document correspondant.  
-Ce mapping permet d'analyser le texte et le stocker dans une structure de donnée optimisée afin de remonter efficacement les suggestions sans passer par une __prefix__ query moins optimisée.
+Cette requête doit pouvoir remonter les titres de recherche sur d, do, doc, dock, docke, docker. Ainsi que l'id du document correspondant. 
 
 ---
 
@@ -597,7 +597,7 @@ GET xebia/_suggest
 </blockquote>
 ---
 __3.10 Suggestion fuzzy:__   
-  Problème l'api de suggestion ne remonte pas de résultat si la personne qui recherche se trompe dans la saisie du texte.   
+  Problème l'api de suggestion ne remonte pas de résultat si la personne qui effectue la recherche se trompe dans la saisie du texte.   
    Modifiez la requête de suggestion afin de pouvoir remonter les suggestions liées à Docker si l'on saisie "Doker".  
    Pour cela, ajoutez le paramètre __"fuzzy":{}__ à la requête.
 <blockquote class = 'solution' markdown="1">
@@ -632,7 +632,7 @@ __3.11 Aggregations:__
             
 ---     
 
-__Attention__ : On doit remonter les terms "exact", pour cela vous allez devoir modifier le mapping.   
+__Attention__ : On doit remonter le texte sans analyse, pour cela vous allez devoir modifier le mapping.   
   
 <blockquote class = 'solution' markdown="1">
 DELETE xebia     

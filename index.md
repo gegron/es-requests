@@ -486,7 +486,7 @@ __3.9 Suggestion :__
   
   -  Ajoutez un champ "suggest" au mapping de type __completion__ et avec comme propriété __"payloads": true__.   
   Ce champ va contenir le texte pour la suggestion mais sera indexé dans une structure optimisée pour faire de la recherche rapide sur du texte.  
-  - Utilisez le fichier [data/xebiablogWithSuggest.data](xebiablogWithSuggest.data) pour l'indéxation. Ce fichier contient les mêmes documents mais avec le champ suggest au format suivant :   
+  - Utilisez le fichier [xebiablogWithSuggest.data](data/xebiablogWithSuggest.data) pour l'indéxation. Ce fichier contient les mêmes documents mais avec le champ suggest au format suivant :   
 {% highlight json %}
   {
     "suggest": {
@@ -613,7 +613,7 @@ __3.10 Suggestion fuzzy:__
 }
 {% endhighlight %}
 </blockquote>
-__3.11 Aggregations:__   
+__3.11 Aggregations par categories:__   
   Nous souhaitons maintenant ramener toutes les catégories possibles pour un blog. Pour cela utilisez une aggrégations de type __terms__.
 
   __Syntaxe :__  
@@ -632,7 +632,8 @@ __3.11 Aggregations:__
             
 ---     
 
-__Attention__ : On doit remonter le texte sans analyse, pour cela vous allez devoir modifier le mapping.   
+__Attention__ : On doit remonter le texte contenu dans le champ __category__ sans analyse, pour cela vous allez devoir modifier le mapping pour ajouter l'option suivante au type __string__ :   
+   `"index": "not_analyzed"`
   
 <blockquote class = 'solution' markdown="1">
 DELETE xebia     
@@ -714,6 +715,125 @@ GET xebia/blog/_search
 {% endhighlight %}
 </blockquote>
 ---   
+__3.12 Aggregations auteurs par categories:__   
+Nous voulons maintenant remonter les différents auteurs par categories. Modifier la requête précédente pour ajouter une sous aggrégations à l'aggrégation par categories:   
+
+  __Syntaxe pour ajouter une sous-aggrégation:__  
+  GET xebia/blog/_search
+  {% highlight json %}      
+{
+  "size": 0,
+  "aggregations" : {
+    "<parent_aggregation_name>" :{
+      "<parent_aggregation_type>": {
+        "field": "<field_name>"
+      },
+      "aggregations" :{
+        "<child_aggregation_name>" : {
+          "child_aggregation_type>": {
+            "field": "<field_name>"
+          }
+        }
+      }
+    }
+  }
+}
+{% endhighlight %}  
+            
+---     
+
+__Attention__ : Même problème que l'aggrégation précédente : une aggrégation doit se faire sur un contenu __exact__ et donc pas sur un texte analysé.
+  
+<blockquote class = 'solution' markdown="1">
+DELETE xebia     
+PUT xebia     
+{% highlight json %}   
+{
+  "mappings": {
+    "blog": {
+      "properties": {
+        "category": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "content": {
+          "type": "string",
+          "analyzer": "my_analyzer"
+        },
+        "creator": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "description": {
+          "type": "string"
+        },
+        "pubDate": {
+          "type": "date",
+          "format": "strict_date_optional_time||epoch_millis"
+        },
+        "title": {
+          "type": "string"
+        },
+        "suggest": {
+          "type": "completion",
+          "payloads": true
+        }
+      }
+    }
+  },
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "mySynonym"
+          ],
+          "char_filter": [
+            " html_strip"
+          ]
+        }
+      },
+      "filter": {
+        "mySynonym": {
+          "type": "synonym",
+          "synonyms": [
+            "lightbend, typesafe => lightbend, typesafe"
+          ]
+        }
+      },
+      "tokenizer": {},
+      "char_filter": {}
+    }
+  }
+}
+{% endhighlight %}
+GET xebia/blog/_search
+{% highlight json %}   
+{
+  "size": 0,
+  "aggregations" : {
+    "by_categories" :{
+      "terms": {
+        "field": "category",
+        "size": 10
+      },
+      "aggregations" :{
+        "by_creator" : {
+          "terms": {
+            "field": "creator",
+            "size": 10
+          }
+        }
+      }
+    }
+  }
+}
+{% endhighlight %}
+</blockquote>
+---   
 
 ### 4. Recherche appartement
 L'agence X-immobilier vient de créér son site internet de recherche de bien immobilier en Île de France.
@@ -751,6 +871,8 @@ Voici un exemple :
 __4.1 Création de l'index__  
 Créér l'indexe pour recevoir les documents avec le mapping ci-dessous.
 Le mapping n'aura plus besoin d'être modifier. Noter le mapping du champ location
+
+###### Attention,  pour cette partie, si vous utilisez le elasticsearch en ligne n'oubliez pas de changer le nom d'index __'x-immobilier'__ en __'votre-nom-x-immobilier'__ ######     
      
 __PUT__ x-immobilier
 {% highlight json %}
@@ -792,17 +914,17 @@ __PUT__ x-immobilier
   __4.2 Indéxer les documents__  
 Pour indexer tous ces documents en une étape vous allez utiliser curl :  
 
- * Télécharger le dataset [data/apartment.data](data/apartment.data)
+ * Télécharger le dataset [apartment.data](data/apartment.data)
  * Exécuter une requête bulk indexing :  
-  `curl -XPUT http://{host}:9200/x-immobilier/apartment/_bulk --data-binary @apartment.data`
+  `curl -XPUT http://{host}:9200/{index_name}/apartment/_bulk --data-binary @apartment.data`
   
  __Vérifier que les 3991 documents sont correctements indexés :__  
  __GET__ x-immobilier/_count
    
 __4.3 Filtre par rapport à la distance depuis un point__  
 Pour les besoins du site, il faut être capable de rechercher les appartements à proximité de certains points d'interêts.  
-Ecrire une requête permettant de remontrer les appartements se trouvant à moins de 500m du  
- métro Cadet lat: 48.876135, "lon": 2.344876 en utilisant un filtre de type __geo_distance__
+Ecrire une requête permettant de remontrer les appartements se trouvant à moins de __500m__ du  
+ métro Cadet __lat: 48.876135__, __"lon": 2.344876__ en utilisant un filtre de type __geo_distance__
 
 <blockquote class = 'solution' markdown="1">
 
@@ -813,7 +935,8 @@ GET x-immobilier/apartment/_search
     "bool": {
       "filter": {
         "geo_distance": {
-          "distance": "500m",
+          "distance": 500,
+          "distance_unit": "m",
           "location": {
             "lat": 48.876135,
             "lon": 2.344876
@@ -826,7 +949,7 @@ GET x-immobilier/apartment/_search
 {% endhighlight %}
 </blockquote>
 __4.4 Tri par rapport à la distance depuis un point__  
-La requête précédente permet aux utilisateurs de remonter les adresses à moins de 500m, cependant les utilisateurs souhaiteraient voir en priorité les apparements les plus proche.
+La requête précédente permet aux utilisateurs de remonter les adresses à moins de 500m, cependant les utilisateurs souhaiteraient voir en priorité les appartements les plus proches.
 Modifier la requête pour ajouter le tri par ___geo_distance__
 
 <blockquote class = 'solution' markdown="1">
@@ -839,6 +962,7 @@ GET x-immobilier/apartment/_search
       "filter": {
         "geo_distance": {
           "distance": "500m",
+          "distance_unit": "m",
           "location": {
             "lat": 48.876135,
             "lon": 2.344876
@@ -852,7 +976,7 @@ GET x-immobilier/apartment/_search
       "_geo_distance": {
         "location": {
           "lat": 48.876135,
-          "lon": 2.344876
+            "lon": 2.344876
         },
         "order": "asc"
       }

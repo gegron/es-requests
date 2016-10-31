@@ -921,10 +921,52 @@ Pour indexer tous ces documents en une étape vous allez utiliser curl :
  __Vérifier que les 3991 documents sont correctements indexés :__  
  __GET__ x-immobilier/_count
    
+                                     
+__4.3 Bounding box query__    
+
+Pour les besoins du site, il faut être capable de rechercher les appartements avec __4 pièces__ se trouvant dans le __9e arrondissement__.
+Le 9e arrondissement pour cette requête est représenté par un rectangle avec les caractéristiques suivantes :   
+ - Extrémité en haut à gauche à la position __"lat": 48.88202934722508, "lon": 2.3397765430833624__
+ - Extrémité en bas à droite à la position __"lat": 48.870738  "lon": 2.347842__    
+    
+Ecrire une requête composée d'une __geo_bounding_box__ sur ce rectangle et d'un __term__ filter pour remonter tous les appartements de 4 pièces dans le 9e.
+<blockquote class = 'solution' markdown="1">
+
+GET x-immobilier/apartment/_search
+{% highlight json %}   
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "geo_bounding_box": {
+            "location": {
+              "top_left": {
+                "lat": 48.88202934722508,
+                "lon": 2.3397765430833624
+              },
+              "bottom_right": {
+                "lat": 48.870738,
+                "lon": 2.347842
+              }
+            }
+          }
+        }
+      ],
+      "filter": {
+        "term": {
+          "nbOfRoom": 4
+        }
+      }
+    }
+  }
+}
+{% endhighlight %}
+</blockquote>
 __4.3 Filtre par rapport à la distance depuis un point__  
-Pour les besoins du site, il faut être capable de rechercher les appartements à proximité de certains points d'interêts.  
-Ecrire une requête permettant de remontrer les appartements se trouvant à moins de __500m__ du  
- métro Cadet __lat: 48.876135__, __"lon": 2.344876__ en utilisant un filtre de type __geo_distance__
+Finalement le 9e arrondissement n'est pas assez restrictif, il faut être capable de rechercher les appartements à 300m ou moins du métro cadet __lat: 48.876135__, __"lon": 2.344876__.   
+Remplacer la __geo_bounding_box__ de la requête précédente par une requête de type __geo_distance__   
+ 
 
 <blockquote class = 'solution' markdown="1">
 
@@ -933,14 +975,21 @@ GET x-immobilier/apartment/_search
 {
   "query": {
     "bool": {
-      "filter": {
-        "geo_distance": {
-          "distance": 500,
-          "distance_unit": "m",
-          "location": {
-            "lat": 48.876135,
-            "lon": 2.344876
+      "must": [
+        {
+          "geo_distance": {
+            "distance": 300,
+            "distance_unit": "m",
+            "location": {
+              "lat": 48.876135,
+              "lon": 2.344876
+            }
           }
+        }
+      ],
+      "filter": {
+        "term": {
+          "nbOfRoom": 4
         }
       }
     }
@@ -949,7 +998,7 @@ GET x-immobilier/apartment/_search
 {% endhighlight %}
 </blockquote>
 __4.4 Tri par rapport à la distance depuis un point__  
-La requête précédente permet aux utilisateurs de remonter les adresses à moins de 500m, cependant les utilisateurs souhaiteraient voir en priorité les appartements les plus proches.
+La requête précédente permet aux utilisateurs de remonter les résultats attendus, cependant les utilisateurs souhaiteraient voir en priorité les appartements les plus proches.
 Modifier la requête pour ajouter le tri par ___geo_distance__
 
 <blockquote class = 'solution' markdown="1">

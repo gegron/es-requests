@@ -838,6 +838,7 @@ GET xebia/blog/_search
 ---
 
 ### 4. Recherche appartement
+
 L'agence X-immobilier vient de créér son site internet de recherche de bien immobilier en Île de France.
 Vous disposez d'un jeux de donnée à indéxer dans elasticsearch contenant des appartements à vendre 
 avec les champs suivants : 
@@ -926,10 +927,10 @@ Pour indexer tous ces documents en une étape vous allez utiliser curl :
 ---                                     
 __4.3 Bounding box query__    
 
-Pour les besoins du site, il faut être capable de rechercher les appartements avec __4 pièces__ se trouvant dans le __9e arrondissement__.
+Pour les besoins du site, il faut être capable de rechercher les appartements avec __4 pièces__ se trouvant dans le __9e arrondissement__.  
 Le 9e arrondissement pour cette requête est représenté par un rectangle avec les caractéristiques suivantes :   
- - Extrémité en haut à gauche à la position __"lat": 48.88202934722508, "lon": 2.3397765430833624__
- - Extrémité en bas à droite à la position __"lat": 48.870738  "lon": 2.347842__    
+ - Extrémité en haut à gauche à la position __"lat": 48.88202934722508, "lon": 2.3397765430833624__  
+ - Extrémité en bas à droite à la position __"lat": 48.870738  "lon": 2.347842__      
     
 Ecrire une requête composée d'une __geo_bounding_box__ sur ce rectangle et d'un __term__ filter pour remonter tous les appartements de 4 pièces dans le 9e.
 <blockquote class = 'solution' markdown="1">
@@ -968,7 +969,7 @@ GET x-immobilier/apartment/_search
 ---
 __4.3 Filtre par rapport à la distance depuis un point__  
 Finalement le 9e arrondissement n'est pas assez restrictif, il faut être capable de rechercher les appartements à 300m ou moins du métro cadet __lat: 48.876135__, __"lon": 2.344876__.   
-Remplacer la __geo_bounding_box__ de la requête précédente par une requête de type __geo_distance__   
+Remplacer la __geo_bounding_box__ de la requête précédente par une requête de type __geo_distance__     
  
 
 <blockquote class = 'solution' markdown="1">
@@ -1002,7 +1003,7 @@ GET x-immobilier/apartment/_search
 </blockquote>
 ---
 __4.4 Tri par rapport à la distance depuis un point__  
-La requête précédente permet aux utilisateurs de remonter les résultats attendus, cependant les utilisateurs souhaiteraient voir en priorité les appartements les plus proches.
+La requête précédente permet aux utilisateurs de remonter les résultats attendus, cependant les utilisateurs souhaiteraient voir en priorité les appartements les plus proches.  
 Modifier la requête pour ajouter le tri par ___geo_distance__
 
 <blockquote class = 'solution' markdown="1">
@@ -1047,14 +1048,14 @@ GET x-immobilier/apartment/_search
 </blockquote>
 ---
 __4.5 Geo_distance aggrégation__  
-Afin d'évaluer la quantité de bien se trouvant à proximité du métro cadet, nous aimerions avoir le compte pour les plages de distance suivantes :    
-- 0 à 100m
-- 100 à 200m
-- 200 à 300m
-- 300 à 400m
-- 400 à 500m
-- 500 à 1000m
-  
+Afin d'évaluer la quantité de bien se trouvant à proximité du métro cadet, nous aimerions avoir le compte pour les plages de distance suivantes :      
+- 0 à 100m  
+- 100 à 200m  
+- 200 à 300m  
+- 300 à 400m  
+- 400 à 500m  
+- 500 à 1000m  
+    
 Pour cela vous devez écrire une requête d'aggrégation de type geo_distance.  
 __Pour vous aider inspirer vous des précédentes requêtes d'aggégations et de l'auto complétion.__     
 <blockquote class = 'solution' markdown="1">

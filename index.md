@@ -613,6 +613,7 @@ __3.10 Suggestion fuzzy:__
 }
 {% endhighlight %}
 </blockquote>
+---
 __3.11 Aggregations par categories:__   
   Nous souhaitons maintenant ramener toutes les catégories possibles pour un blog. Pour cela utilisez une aggrégations de type __terms__.
 
@@ -834,7 +835,7 @@ GET xebia/blog/_search
 {% endhighlight %}
 </blockquote>
 ---   
-
+---
 ### 4. Recherche appartement
 L'agence X-immobilier vient de créér son site internet de recherche de bien immobilier en Île de France.
 Vous disposez d'un jeux de donnée à indéxer dans elasticsearch contenant des appartements à vendre 
@@ -867,7 +868,7 @@ Voici un exemple :
         "lon": 2.64448
     }
 }{% endhighlight %}
-
+---
 __4.1 Création de l'index__  
 Créér l'indexe pour recevoir les documents avec le mapping ci-dessous.
 Le mapping n'aura plus besoin d'être modifier. Noter le mapping du champ location
@@ -921,7 +922,7 @@ Pour indexer tous ces documents en une étape vous allez utiliser curl :
  __Vérifier que les 3991 documents sont correctements indexés :__  
  __GET__ x-immobilier/_count
    
-                                     
+---                                     
 __4.3 Bounding box query__    
 
 Pour les besoins du site, il faut être capable de rechercher les appartements avec __4 pièces__ se trouvant dans le __9e arrondissement__.
@@ -963,6 +964,7 @@ GET x-immobilier/apartment/_search
 }
 {% endhighlight %}
 </blockquote>
+---
 __4.3 Filtre par rapport à la distance depuis un point__  
 Finalement le 9e arrondissement n'est pas assez restrictif, il faut être capable de rechercher les appartements à 300m ou moins du métro cadet __lat: 48.876135__, __"lon": 2.344876__.   
 Remplacer la __geo_bounding_box__ de la requête précédente par une requête de type __geo_distance__   
@@ -997,6 +999,7 @@ GET x-immobilier/apartment/_search
 }
 {% endhighlight %}
 </blockquote>
+---
 __4.4 Tri par rapport à la distance depuis un point__  
 La requête précédente permet aux utilisateurs de remonter les résultats attendus, cependant les utilisateurs souhaiteraient voir en priorité les appartements les plus proches.
 Modifier la requête pour ajouter le tri par ___geo_distance__
@@ -1007,19 +1010,26 @@ GET x-immobilier/apartment/_search
 {% highlight json %}   
 {
   "query": {
-    "bool": {
-      "filter": {
-        "geo_distance": {
-          "distance": "500m",
-          "distance_unit": "m",
-          "location": {
-            "lat": 48.876135,
-            "lon": 2.344876
+      "bool": {
+        "must": [
+          {
+            "geo_distance": {
+              "distance": 300,
+              "distance_unit": "m",
+              "location": {
+                "lat": 48.876135,
+                "lon": 2.344876
+              }
+            }
+          }
+        ],
+        "filter": {
+          "term": {
+            "nbOfRoom": 4
           }
         }
       }
-    }
-  },
+    },
   "sort": [
     {
       "_geo_distance": {
@@ -1031,6 +1041,60 @@ GET x-immobilier/apartment/_search
       }
     }
   ]
+}
+{% endhighlight %}
+</blockquote>
+---
+__4.5 Geo_distance aggrégation__  
+Afin d'évaluer la quantité de bien se trouvant à proximité du métro cadet, nous aimerions avoir le compte pour les plages de distance suivantes :    
+- 0 à 100m
+- 100 à 200m
+- 200 à 300m
+- 300 à 400m
+- 400 à 500m
+- 500 à 1000m
+  
+Pour cela vous devez écrire une requête d'aggrégation de type geo_distance.  
+__Pour vous aider inspirer vous des précédentes requêtes d'aggégations et de l'auto complétion.__     
+<blockquote class = 'solution' markdown="1">
+
+GET x-immobilier/apartment/_search
+{% highlight json %}   
+{
+  "size": 0,
+  "aggs": {
+    "by_geo": {
+      "geo_distance": {
+        "field": "location",
+        "origin": {
+          "lat": 48.876135,
+          "lon": 2.344876
+        },
+        "unit": "m",
+        "ranges": [
+          {
+            "to": 100
+          },
+          {
+            "from": 200,
+            "to": 300
+          },
+          {
+            "from": 300,
+            "to": 400
+          },
+          {
+            "from": 400,
+            "to": 500
+          },
+          {
+            "from": 500,
+            "to": 1000
+          }
+        ]
+      }
+    }
+  }
 }
 {% endhighlight %}
 </blockquote>

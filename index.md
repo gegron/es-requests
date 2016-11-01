@@ -836,6 +836,7 @@ GET xebia/blog/_search
 </blockquote>
 ---   
 ---
+
 ### 4. Recherche appartement
 L'agence X-immobilier vient de créér son site internet de recherche de bien immobilier en Île de France.
 Vous disposez d'un jeux de donnée à indéxer dans elasticsearch contenant des appartements à vendre 

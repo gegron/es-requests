@@ -18,7 +18,7 @@ sense sur [http://localhost:5601/app/sense](http://localhost:5601/app/sense)
 
 * __Choix numéro 2 : Utiliser l'Elasticsearch mis à votre disposition (partagé par tout le monde)__  
 
-Vous pouvez ensuite accéder à elasticsearch sur [http://ip:9200/](http://ip:9200/) et sense sur [http://ip:5601/app/sense](http://ip:5601/app/sense)  
+Vous pouvez ensuite accéder à elasticsearch sur [http://xebi_els.aws.xebiatechevent.info/](http://xebi_els.aws.xebiatechevent.info/) et sense sur [http://xebi_kibana.aws.xebiatechevent.info:5601/app/sense](http://xebi_kibana.aws.xebiatechevent.info:5601/app/sense)  
 Comme cet elasticsearch est utilisé par plusieurs personnes, veuillez préfixer le nom de vos indexes par
 votre nom lors des différentes requêtes de l'exercice.  
 Exemple : Au lieu de faire GET http://ip:9200/myIndex/_search, je fais GET

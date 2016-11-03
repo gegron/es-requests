@@ -33,6 +33,7 @@ Pour effectuer des requêtes, vous allez utiliser l'api REST. Pour cela plusieur
  ---
  
 ### 2. Découverte de l'api
+
 ###### Attention,  pour cette partie, si vous utilisez le elasticsearch en ligne n'oubliez pas de changer le nom d'index __'programmer'__ en __'votre-nom-programmer'__ ######   
 
    __2.1 Premier document indexé :__    
@@ -115,8 +116,8 @@ __DELETE__ programmer
 ---
 
 ### 3. Recherche d'article de blog
-Vous disposez un jeux de donnée à indexer dans elasticsearch contenant les articles du blog de Xebia. Vous allez
-dévoir réaliser plusieurs étapes afin d'implémenter la recherche de ces articles. Un document réprésente un
+Vous disposez un jeu de données à indexer dans elasticsearch contenant les articles du blog de Xebia. Vous allez
+devoir réaliser plusieurs étapes afin d'implémenter la recherche de ces articles. Un document réprésente un
 article avec les champs suivants : 
 
 * __title__ : le titre de l'article

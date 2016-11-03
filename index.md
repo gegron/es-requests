@@ -189,9 +189,9 @@ Pour indexer tous ces documents en une étape vous allez utiliser curl :
 
  * Télécharger le dataset [data/xebiablog.data](xebiablog.data)
  * Exécuter une requête bulk indexing :  
-  `curl -XPUT http://{host}:9200/{indexName}/blog/_bulk --data-binary @xebiablog.data
+  `curl -XPUT http://{host}/{indexName}/blog/_bulk --data-binary @xebiablog.data
   
-  __Vérifier que les 1197 documents sont correctements indexés :__  
+  __Vérifier que les 23 documents sont correctements indexés :__  
   __GET__ xebia/blog/_count  
   
 Le fichier xebiablog.data contient l'ensemble des documents à indexer au format :   
@@ -304,7 +304,7 @@ __PUT__ xebia
   }
 }
 {% endhighlight %}
-__curl -XPUT "http://{host}:9200/{indexName}/blog/_bulk" --data-binary @xebiablog.data__
+__curl -XPUT "http://{host}/{indexName}/blog/_bulk" --data-binary @xebiablog.data__
 </blockquote>
 ---  
 
@@ -386,7 +386,7 @@ __PUT__ xebia
   }
 }
 {% endhighlight %}
-__curl -XPUT "http://{host}:9200/{indexName}/blog/_bulk" --data-binary @xebiablog.data__
+__curl -XPUT "http://{host}/{indexName}/blog/_bulk" --data-binary @xebiablog.data__
 </blockquote>
 ---
 
@@ -582,7 +582,7 @@ PUT xebia
   }
 }
  {% endhighlight %}
-curl -XPUT "localhost:9200/xebia/blog/_bulk" --data-binary @xebiablogWithSuggest.data
+curl -XPUT "localhost/xebia/blog/_bulk" --data-binary @xebiablogWithSuggest.data
 
 GET xebia/_suggest
 {% highlight json %}   
@@ -920,9 +920,9 @@ Pour indexer tous ces documents en une étape vous allez utiliser curl :
 
  * Télécharger le dataset [apartment.data](data/apartment.data)
  * Exécuter une requête bulk indexing :  
-  `curl -XPUT http://{host}:9200/{index_name}/apartment/_bulk --data-binary @apartment.data`
+  `curl -XPUT http://{host}/{index_name}/apartment/_bulk --data-binary @apartment.data`
   
- __Vérifier que les 3991 documents sont correctements indexés :__  
+ __Vérifier que les 987 documents sont correctements indexés :__  
  __GET__ x-immobilier/_count
    
 ---                                     

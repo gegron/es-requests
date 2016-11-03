@@ -390,7 +390,7 @@ __curl -XPUT "http://{host}:9200/{indexName}/blog/_bulk" --data-binary @xebiablo
 </blockquote>
 ---
 
-  __3.7 Suppression des posts trop anciens :__   
+  __3.7 Filtrage des posts trop anciens :__   
   Les recherchent peuvent remonter des résultats de 2011. Utilisez la recherche full text conjointement avec un filtre pour ne pas remonter les documents plus anciens de 2 ans.      
 Pour cela utilisez une **bool** query  et un **range** filter  
 __Syntaxe :__   

@@ -5,31 +5,33 @@ layout: main
 ---
 
 ### 1. Préparation de votre environnement
-Pour réaliser les différentes étapes de ce hands-on, vous avez besoin d'un elasticsearch.  
+Pour réaliser les différentes étapes de ce hands-on, vous avez besoin d'un elasticsearch et d'un sense  
  Plusieurs choix s'offre à vous :  
-* __Choix numéro 1 : Utiliser Elasticsearch via Docker :__  
-`docker run -p 9200:9200 -p 5601:5601 ibeauvais/elasticsearch-kibana`
-    
+* __Choix numéro 1 : Vous avez docker sur votre machine, utilisez Elasticsearch via Docker :__  
+`docker run -p 9200:9200 -p 5601:5601 ibeauvais/elasticsearch-kibana`  
 
 Vous pouvez ensuite accéder à elasticsearch sur [http://localhost:9200/](http://localhost:9200/) et
 sense sur [http://localhost:5601/app/sense](http://localhost:5601/app/sense)  
 (si vous utilisez docker sur une vm ou via docker-machine remplacer localhost par l'ip de la vm)
+    
+* __Choix numéro 2 : Vous avez Java d'installé (minimum 1.7), utilisez un Elasticsearch local (fourni via la clef usb):__  
+    - dezipper elasticsearch-2.4.1.zip  
+    - Démarrer le avec la commande __elasticsearch/bin/elasticsearch__ ou __elasticsearch/bin/elasticsearch.bat__ (windows)   
+Vous pouvez ensuite accéder à elasticsearch sur [http://localhost:9200/](http://localhost:9200/) et
+sense sur la version en ligne sur [http://kibana.xebicon.aws.xebiatechevent.info:5601/app/sense](http://kibana.xebicon.aws.xebiatechevent.info:5601/app/sense) __=> vous devez modifier le champ "Server" en localhost:9200__       
+    
 
 
-* __Choix numéro 2 : Utiliser l'Elasticsearch mis à votre disposition (partagé par tout le monde)__  
 
-Vous pouvez ensuite accéder à elasticsearch sur [http://xebi_els.aws.xebiatechevent.info/](http://xebi_els.aws.xebiatechevent.info/) et sense sur [http://xebi_kibana.aws.xebiatechevent.info:5601/app/sense](http://xebi_kibana.aws.xebiatechevent.info:5601/app/sense)  
+* __Choix numéro 3 : Utiliser l'Elasticsearch mis à votre disposition (partagé par tout le monde)__  
+
+Vous pouvez ensuite accéder à elasticsearch sur [http://els.xebicon.aws.xebiatechevent.info/](http://els.xebicon.aws.xebiatechevent.info/) et sense sur [http://kibana.xebicon.aws.xebiatechevent.info:5601/app/sense](http://kibana.xebicon.aws.xebiatechevent.info:5601/app/sense)  
 Comme cet elasticsearch est utilisé par plusieurs personnes, veuillez préfixer le nom de vos indexes par
-votre nom lors des différentes requêtes de l'exercice.  
-Exemple : Au lieu de faire GET http://ip:9200/myIndex/_search, je fais GET
-            http://ip:9200/beauvais-myIndex/_search
-
-Pour effectuer des requêtes, vous allez utiliser l'api REST. Pour cela plusieurs choix également :  
-
-* __Utiliser sense :__ application kibana avec auto-complétion et formatage des requêtes  
-* __Utiliser cUrl__ 
-* __le client http de votre choix__ 
-
+votre nom lors des différentes requêtes de l'exercice.   
+  
+Exemple : Au lieu de faire GET http://els.xebicon.aws.xebiatechevent.info/__myIndex__/_search, je fais GET
+            http://els.xebicon.aws.xebiatechevent.info:9200/__beauvais-myIndex__/_search  
+  
  ---
  
 ### 2. Découverte de l'api

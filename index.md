@@ -451,7 +451,7 @@ _
 ---
 
   __3.8 Requête sur plusieurs champs :__   
-  En gardant la requête précédente mais sur le texte "javascript", les résultats ne sont pas assez ciblés sur le sujet. Afin de rendre le résultat plus pertinent modifier la requête précédente pour remplacer la requête de type **match** par une requête de type **multi_match** 
+  En gardant la requête précédente mais sur le texte "javascript", les résultats ne sont pas assez ciblés sur le sujet. En effet, on remonte un blog très général de la revue de presse au lieu d'articles dédiés au javascript. Afin de rendre le résultat plus pertinent modifier la requête précédente pour remplacer la requête de type **match** par une requête de type **multi_match** 
   afin de pouvoir exécuter la même requête conjointement sur le champ "content" et le champ "title".    
   
 

@@ -196,7 +196,7 @@ Pour indexer tous ces documents en une étape vous allez utiliser curl :
   __Vérifier que les 23 documents sont correctements indexés :__  
   __GET__ xebia/blog/_count  
   
-Le fichier xebiablog.data contient l'ensemble des documents à indexer au format :   
+Le fichier __xebiablog.data__ contient l'ensemble des documents à indexer au format :   
 {"index" : {"_id":"2"}}  
 {"title":"Scrum pour la Recherche","pubDate":"2016-09-19T13:39:42"  ...}        
 [...]  

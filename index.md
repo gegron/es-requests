@@ -189,7 +189,7 @@ __PUT__ xebia
   __3.2 Indéxer les documents__  
 Pour indexer tous ces documents en une étape vous allez utiliser curl :  
 
- * Télécharger le dataset [data/xebiablog.data](xebiablog.data)
+ * Télécharger le dataset [xebiablog.data](data/xebiablog.data)
  * Exécuter une requête bulk indexing :  
   `curl -XPUT http://{host}/{indexName}/blog/_bulk --data-binary @xebiablog.data`
   

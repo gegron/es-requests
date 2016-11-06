@@ -215,7 +215,7 @@ __GET__ xebia/blog/_search
 {% endhighlight %}
 </blockquote>
 ---
-  __3.4 La requête précédente permet de rechercher sur le contenu des articles. Cependant en effectuant cette requête sur le texte "Recherche full Text", les résultats ne semblent pas remonter de contenu pertinent.
+  __3.4 La requête précédente permet de rechercher sur le contenu des articles. Cependant en effectuant cette requête sur le texte "Recherche full Text", les résultats ne semblent pas remonter de contenu pertinent : En effet, les 2 premiers résultat remontés n'ont pas de rapport avec ces termes.
 Utiliser l'highlighting afin de comprendre pourquoi ces résultats sont remontés.__
 <blockquote class = 'solution' markdown="1">
 GET xebia/blog/_search

@@ -647,7 +647,7 @@ __3.11 Aggregations par categories:__
 
 __Attention__ : On doit remonter le texte contenu dans le champ __category__ sans analyse, pour cela vous allez devoir modifier le mapping pour ajouter l'option suivante au type __string__ :   
    `"index": "not_analyzed"`  
-L'attribut __size__ est à 0 car on ne tient pas ici à remonter les documentsmais  uniquement le résultat de l'aggrégation
+L'attribut __size__ est à 0 car on ne tient pas ici à remonter les documents mais  uniquement le résultat de l'aggrégation
   
 <blockquote class = 'solution' markdown="1">
 DELETE xebia     

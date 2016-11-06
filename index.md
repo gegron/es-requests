@@ -310,7 +310,7 @@ __curl -XPUT "http://{host}/{indexName}/blog/_bulk" --data-binary @xebiablog.dat
 </blockquote>
 ---  
 
-  __3.6 L'entreprise Typesafe a changé de nom pour Lightbend. Problème, les recherches sur "lightbend" ne remontent que 3 résultats. Modifier le mapping afin que toutes les recherches sur un des noms remontent les résultats associés aux 2 noms d'entreprise.__   
+  __3.6 L'entreprise Typesafe a changé de nom pour Lightbend. Problème, les recherches sur "lightbend" ne remontent que 2 résultats. Modifier le mapping afin que toutes les recherches sur un des noms remontent les 8 résultats associés aux 2 noms d'entreprise.__   
   Pour cela declarez un _filter_ de type synonym dans la partie `"filter": {},`du mapping et utilisez le dans l'analyzer my_analyzer 
 
 __Syntaxe :__   

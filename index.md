@@ -50,7 +50,7 @@ Requête __POST__ programmer/person/1
   
 ---  
    
-- **programmer** est le nom de l'indexe
+- **programmer** est le nom de l'index
 - **person** est le type de document
 - **1** est l'id   
    
@@ -134,8 +134,8 @@ article avec les champs suivants :
 ###### Attention, pour cet partie, si vous utilisez le elasticsearch en ligne n’oubliez pas de changer le nom d’index __‘xebia’__ en __‘votre-nom-xebia’__ ######
 
   __3.1 Création de l'index__  
-Créér l'indexe pour recevoir les documents avec le mapping ci-dessous, ce mapping est équivalent au mapping par défaut généré par Elasticsearch mais sera plus facilement modifiable par la suite (Déclaration d'un premier analyzer).
- Pour créér l'indexe 'xebia' avec ce mapping :  
+Créér l'index pour recevoir les documents avec le mapping ci-dessous, ce mapping est équivalent au mapping par défaut généré par Elasticsearch mais sera plus facilement modifiable par la suite (Déclaration d'un premier analyzer).
+ Pour créér l'index 'xebia' avec ce mapping :  
     
 __PUT__ xebia
 {% highlight json %}
@@ -250,8 +250,8 @@ __Syntaxe :__
 ---
 
   * pour modifier le mapping vous devez : 
-    * Supprimer l'indexe
-    * Re-créér l'indexe avec le nouveau mapping :   
+    * Supprimer l'index
+    * Re-créér l'index avec le nouveau mapping :   
     * Re-indexer tous les documents (avec le cUrl) 
 
 <blockquote class = 'solution' markdown="1">
@@ -875,7 +875,7 @@ Voici un exemple :
 }{% endhighlight %}
 ---
 __4.1 Création de l'index__  
-Créér l'indexe pour recevoir les documents avec le mapping ci-dessous.
+Créér l'index pour recevoir les documents avec le mapping ci-dessous.
 Le mapping n'aura plus besoin d'être modifier. Noter le mapping du champ location
 
 ###### Attention,  pour cette partie, si vous utilisez le elasticsearch en ligne n'oubliez pas de changer le nom d'index __'x-immobilier'__ en __'votre-nom-x-immobilier'__ ######     

@@ -940,7 +940,7 @@ Le 9e arrondissement pour cette requête est représenté par un rectangle avec 
  - Extrémité en haut à gauche à la position __"lat": 48.88202934722508, "lon": 2.3397765430833624__  
  - Extrémité en bas à droite à la position __"lat": 48.870738  "lon": 2.347842__      
     
-Ecrire une requête composée d'une __geo_bounding_box__ sur ce rectangle pour remonter tous les appartements dans le 9e.
+Ecrire une requête avec un __filtre__  __geo_bounding_box__ sur ce rectangle pour remonterles 21 appartements dans le 9e.
 <blockquote class = 'solution' markdown="1">
 
 GET x-immobilier/apartment/_search
@@ -972,7 +972,7 @@ GET x-immobilier/apartment/_search
 ---
 __4.3 Filtre par rapport à la distance depuis un point__  
 Finalement le 9e arrondissement n'est pas assez restrictif, il faut être capable de rechercher les appartements à 300m ou moins du métro cadet __lat: 48.876135__, __"lon": 2.344876__.   
-Remplacer la __geo_bounding_box__ de la requête précédente par une requête de type __geo_distance__     
+Remplacer le __geo_bounding_box__ filter de la requête précédente par un filtre de type __geo_distance__  afin de de remonter les 10 appartements à 300m ou moins.   
  
 
 <blockquote class = 'solution' markdown="1">
@@ -982,23 +982,18 @@ GET x-immobilier/apartment/_search
 {
   "query": {
     "bool": {
-      "must": [
+      "filter": 
         {
-          "geo_distance": {
-            "distance": 300,
-            "distance_unit": "m",
-            "location": {
-              "lat": 48.876135,
-              "lon": 2.344876
-            }
-          }
+         "geo_distance": {
+           "distance": 300,
+           "distance_unit": "m",
+           "location": {
+             "lat": 48.876135,
+             "lon": 2.344876
+           }
+         }
         }
-      ],
-      "filter": {
-        "term": {
-          "nbOfRoom": 4
-        }
-      }
+      
     }
   }
 }
@@ -1007,7 +1002,8 @@ GET x-immobilier/apartment/_search
 ---
 __4.4 Tri par rapport à la distance depuis un point__  
 La requête précédente permet aux utilisateurs de remonter les résultats attendus, cependant les utilisateurs souhaiteraient voir en priorité les appartements les plus proches.  
-Modifier la requête pour ajouter le tri par ___geo_distance__
+Modifier la requête pour ajouter le tri par ___geo_distance__  
+Vous devez avoir en premier l'appartement se trouvant __46 RUE DE TREVISE__
 
 <blockquote class = 'solution' markdown="1">
 

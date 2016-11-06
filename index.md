@@ -89,7 +89,7 @@ __GET__ programmer/person/_search
 }
 {% endhighlight %}
 ---
-  __2.6 Recherche full text avec highlighting (mise en surbrillance du terme qui "match" le texte de recherche) :__
+  __2.6 Recherche full text avec highlighting (mise en surbrillance du terme qui "match" le texte de recherche) :__  
 __GET__ programmer/person/_search
 {% highlight json %}
 {

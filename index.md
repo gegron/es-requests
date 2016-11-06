@@ -310,6 +310,8 @@ __curl -XPUT "http://{host}/{indexName}/blog/_bulk" --data-binary @xebiablog.dat
 </blockquote>
 ---  
 
+Relancer la requête sur le texte "Recherche full Text" afin de vérifier qu'il y a moins de résultats mais qu'ils sont plus pertinents !
+   
   __3.6 L'entreprise Typesafe a changé de nom pour Lightbend. Problème, les recherches sur "lightbend" ne remontent que 2 résultats. Modifier le mapping afin que toutes les recherches sur un des noms remontent les 8 résultats associés aux 2 noms d'entreprise.__   
   Pour cela declarez un _filter_ de type synonym dans la partie `"filter": {},`du mapping et utilisez le dans l'analyzer my_analyzer 
 
@@ -393,7 +395,7 @@ __curl -XPUT "http://{host}/{indexName}/blog/_bulk" --data-binary @xebiablog.dat
 ---
 
   __3.7 Filtrage des posts trop anciens :__   
-  Les recherchent peuvent remonter des résultats de 2011. En recherchant "sponsor", on remonte un blog post intitulé __"Xebia sponsor platinium de Devoxx France !"__ trop ancien.  
+  Les recherches peuvent remonter des résultats de 2011. En recherchant "sponsor", on remonte un blog post intitulé __"Xebia sponsor platinium de Devoxx France !"__ trop ancien.  
   Utilisez la recherche full text conjointement avec un filtre pour ne pas remonter les documents plus anciens de 4 ans.
   La recherche sur "sponsor" doit remonter uniquement un blog post __"Xebia sponsor Gold de Scala.io 2013"__.  
 Pour cela utilisez une **bool** query  et un **range** filter  
@@ -421,6 +423,9 @@ __Syntaxe :__
   }
 }       
 {% endhighlight %}
+
+---
+
 
 <blockquote class = 'solution' markdown="1">
 GET xebia/blog/_search
@@ -848,7 +853,7 @@ GET xebia/blog/_search
 ### 4. Recherche appartement
 
 L'agence X-immobilier vient de créér son site internet de recherche de bien immobilier en Île de France.
-Vous disposez d'un jeux de donnée à indéxer dans elasticsearch contenant des appartements à vendre 
+Vous disposez d'un jeu de données à indéxer dans ElasticSearch contenant des appartements à vendre 
 avec les champs suivants : 
 
 * __price__ : Le prix en euro
@@ -888,38 +893,38 @@ Le mapping n'aura plus besoin d'être modifié. Noter le mapping du champ locati
 __PUT__ x-immobilier
 {% highlight json %}
 {
-     "mappings": {
-       "apartment": {
+ "mappings": {
+   "apartment": {
+     "properties": {
+       "address": {
          "properties": {
-           "address": {
-             "properties": {
-               "city": {
-                 "type": "string"
-               },
-               "postalCode": {
-                 "type": "string"
-               },
-               "street": {
-                 "type": "string"
-               }
-             }
+           "city": {
+             "type": "string"
            },
-           "location": {
-              "type": "geo_point"
+           "postalCode": {
+             "type": "string"
            },
-           "nbOfRoom": {
-             "type": "long"
-           },
-           "price": {
-             "type": "long"
-           },
-           "surface": {
-             "type": "long"
+           "street": {
+             "type": "string"
            }
          }
+       },
+       "location": {
+          "type": "geo_point"
+       },
+       "nbOfRoom": {
+         "type": "long"
+       },
+       "price": {
+         "type": "long"
+       },
+       "surface": {
+         "type": "long"
        }
      }
    }
+ }
+}
 {% endhighlight %}
 ---
   __4.2 Indéxer les documents__  

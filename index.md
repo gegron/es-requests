@@ -30,7 +30,7 @@ Comme cet Elasticsearch est utilisé par plusieurs personnes, veuillez préfixer
 votre nom lors des différentes requêtes de l'exercice.   
   
 Exemple : Au lieu de faire GET http://els.xebicon.aws.xebiatechevent.info/__myIndex__/_search, je fais GET
-            http://els.xebicon.aws.xebiatechevent.info:9200/__beauvais-myIndex__/_search  
+            http://els.xebicon.aws.xebiatechevent.info/__beauvais-myIndex__/_search  
   
  ---
  

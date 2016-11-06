@@ -16,7 +16,7 @@ sense sur [http://localhost:5601/app/sense](http://localhost:5601/app/sense)
     
 * __Choix numéro 2 : Vous avez Java d'installé (minimum 1.7), utilisez un Elasticsearch local (fourni via la clef usb):__  
     - dezipper elasticsearch-2.4.1.zip  
-    - Démarrer le avec la commande __elasticsearch/bin/elasticsearch__ ou __elasticsearch/bin/elasticsearch.bat__ (windows)   
+    - Démarrer le avec la commande __elasticsearch-2.4.1/bin/elasticsearch__ ou __elasticsearch-2.4.1/bin/elasticsearch.bat__ (windows)   
 Vous pouvez ensuite accéder à elasticsearch sur [http://localhost:9200/](http://localhost:9200/) et
 sense sur la version en ligne sur [http://kibana.xebicon.aws.xebiatechevent.info:5601/app/sense](http://kibana.xebicon.aws.xebiatechevent.info:5601/app/sense) __=> vous devez modifier le champ "Server" en localhost:9200__       
     

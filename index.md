@@ -393,7 +393,9 @@ __curl -XPUT "http://{host}/{indexName}/blog/_bulk" --data-binary @xebiablog.dat
 ---
 
   __3.7 Filtrage des posts trop anciens :__   
-  Les recherchent peuvent remonter des résultats de 2011. Utilisez la recherche full text conjointement avec un filtre pour ne pas remonter les documents plus anciens de 2 ans.      
+  Les recherchent peuvent remonter des résultats de 2011. En recherchant "sponsor", on remonte un blog post intitulé __"Xebia sponsor platinium de Devoxx France !"__ trop ancien.  
+  Utilisez la recherche full text conjointement avec un filtre pour ne pas remonter les documents plus anciens de 4 ans.
+  La recherche sur "sponsor" doit remonter uniquement un blog post __"Xebia sponsor Gold de Scala.io 2013"__.  
 Pour cela utilisez une **bool** query  et un **range** filter  
 __Syntaxe :__   
 {% highlight json %}
@@ -429,14 +431,14 @@ GET xebia/blog/_search
       "must": [
         {
           "match": {
-            "content": "java"
+            "content": "sponsor"
           }
         }
       ],
       "filter": {
         "range": {
           "pubDate": {
-            "gte": "now-2y"
+            "gte": "now-4y"
           }
         }
       }

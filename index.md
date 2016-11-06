@@ -490,7 +490,7 @@ _
 __3.9 Suggestion :__   
   Nous souhaitons être capable de faire de la suggestion sur le titre des posts dès la première lettre saisie. Pour cela, vous allez utiliser l'api __Completion suggester :__    
   
-  -  Ajoutez un champ "suggest" au mapping de type __completion__ et avec comme propriété __"payloads": true__.   
+  -  Ajoutez un champ "suggest" au mapping, de type __completion__ et avec comme propriété __"payloads": true__.   
   Ce champ va contenir le texte pour la suggestion mais sera indexé dans une structure optimisée pour faire de la recherche rapide sur du texte.  
   - Utilisez le fichier [xebiablogWithSuggest.data](data/xebiablogWithSuggest.data) pour l'indéxation. Ce fichier contient les mêmes documents mais avec le champ suggest au format suivant :   
 {% highlight json %}
@@ -605,7 +605,7 @@ GET xebia/_suggest
 __3.10 Suggestion fuzzy:__   
   Problème l'api de suggestion ne remonte pas de résultat si la personne qui effectue la recherche se trompe dans la saisie du texte.   
    Modifiez la requête de suggestion afin de pouvoir remonter les suggestions liées à Docker si l'on saisie "Doker".  
-   Pour cela, ajoutez le paramètre __"fuzzy":{}__ à la requête.
+   Pour cela, ajoutez le paramètre `"fuzzy":{}` à la requête.
 <blockquote class = 'solution' markdown="1">
 {% highlight json %}   
 {

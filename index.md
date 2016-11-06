@@ -1011,32 +1011,25 @@ GET x-immobilier/apartment/_search
 {% highlight json %}   
 {
   "query": {
-      "bool": {
-        "must": [
-          {
-            "geo_distance": {
-              "distance": 300,
-              "distance_unit": "m",
-              "location": {
-                "lat": 48.876135,
-                "lon": 2.344876
-              }
-            }
-          }
-        ],
-        "filter": {
-          "term": {
-            "nbOfRoom": 4
+    "bool": {
+      "filter": {
+        "geo_distance": {
+          "distance": 300,
+          "distance_unit": "m",
+          "location": {
+            "lat": 48.876135,
+            "lon": 2.344876
           }
         }
       }
-    },
+    }
+  },
   "sort": [
     {
       "_geo_distance": {
         "location": {
           "lat": 48.876135,
-            "lon": 2.344876
+          "lon": 2.344876
         },
         "order": "asc"
       }

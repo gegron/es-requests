@@ -621,7 +621,8 @@ __3.10 Suggestion fuzzy:__
 </blockquote>
 ---
 __3.11 Aggregations par categories:__   
-  Nous souhaitons maintenant ramener toutes les catégories possibles pour un blog. Pour cela utilisez une aggrégations de type __terms__.
+  Nous souhaitons maintenant ramener toutes les catégories possibles pour un blog.  
+  Pour cela utilisez une aggrégations de type __terms__.
 
   __Syntaxe :__  
   GET xebia/blog/_search
@@ -640,7 +641,8 @@ __3.11 Aggregations par categories:__
 ---     
 
 __Attention__ : On doit remonter le texte contenu dans le champ __category__ sans analyse, pour cela vous allez devoir modifier le mapping pour ajouter l'option suivante au type __string__ :   
-   `"index": "not_analyzed"`
+   `"index": "not_analyzed"`  
+L'attribut __size__ est à 0 car on ne tient pas ici à remonter les documents uniquement le résultat de l'aggrégation
   
 <blockquote class = 'solution' markdown="1">
 DELETE xebia     

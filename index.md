@@ -5,19 +5,19 @@ layout: main
 ---
 
 ### 1. Préparation de votre environnement
-Pour réaliser les différentes étapes de ce hands-on, vous avez besoin d'un elasticsearch et d'un sense  
+Pour réaliser les différentes étapes de ce hands-on, vous avez besoin d'un ElasticSearch et d'un sense  
  Plusieurs choix s'offre à vous :  
 * __Choix numéro 1 : Vous avez docker sur votre machine, utilisez Elasticsearch via Docker :__  
 `docker run -p 9200:9200 -p 5601:5601 ibeauvais/elasticsearch-kibana`  
 
-Vous pouvez ensuite accéder à elasticsearch sur [http://localhost:9200/](http://localhost:9200/) et
+Vous pouvez ensuite accéder à ElasticSearch sur [http://localhost:9200/](http://localhost:9200/) et
 sense sur [http://localhost:5601/app/sense](http://localhost:5601/app/sense)  
 (si vous utilisez docker sur une vm ou via docker-machine remplacer localhost par l'ip de la vm)
     
 * __Choix numéro 2 : Vous avez Java d'installé (minimum 1.7), utilisez un Elasticsearch local (fourni via la clef usb):__  
-    - dezipper elasticsearch-2.4.1.zip  
+    - dézipper elasticsearch-2.4.1.zip  
     - Démarrer le avec la commande __elasticsearch-2.4.1/bin/elasticsearch__ ou __elasticsearch-2.4.1/bin/elasticsearch.bat__ (windows)   
-Vous pouvez ensuite accéder à elasticsearch sur [http://localhost:9200/](http://localhost:9200/) et
+Vous pouvez ensuite accéder à ElasticSearch sur [http://localhost:9200/](http://localhost:9200/) et
 sense sur la version en ligne sur [http://kibana.xebicon.aws.xebiatechevent.info:5601/app/sense](http://kibana.xebicon.aws.xebiatechevent.info:5601/app/sense) __=> vous devez modifier le champ "Server" en localhost:9200__       
     
 
@@ -25,8 +25,8 @@ sense sur la version en ligne sur [http://kibana.xebicon.aws.xebiatechevent.info
 
 * __Choix numéro 3 : Utiliser l'Elasticsearch mis à votre disposition (partagé par tout le monde)__  
 
-Vous pouvez ensuite accéder à elasticsearch sur [http://els.xebicon.aws.xebiatechevent.info/](http://els.xebicon.aws.xebiatechevent.info/) et sense sur [http://kibana.xebicon.aws.xebiatechevent.info:5601/app/sense](http://kibana.xebicon.aws.xebiatechevent.info:5601/app/sense)  
-Comme cet elasticsearch est utilisé par plusieurs personnes, veuillez préfixer le nom de vos indexes par
+Vous pouvez ensuite accéder à ElasticSearch sur [http://els.xebicon.aws.xebiatechevent.info/](http://els.xebicon.aws.xebiatechevent.info/) et sense sur [http://kibana.xebicon.aws.xebiatechevent.info:5601/app/sense](http://kibana.xebicon.aws.xebiatechevent.info:5601/app/sense)  
+Comme cet ElasticSearch est utilisé par plusieurs personnes, veuillez préfixer le nom de vos indexes par
 votre nom lors des différentes requêtes de l'exercice.   
   
 Exemple : Au lieu de faire GET http://els.xebicon.aws.xebiatechevent.info/__myIndex__/_search, je fais GET
@@ -36,7 +36,7 @@ Exemple : Au lieu de faire GET http://els.xebicon.aws.xebiatechevent.info/__myIn
  
 ### 2. Découverte de l'api
 
-###### Attention,  pour cette partie, si vous utilisez le elasticsearch en ligne n'oubliez pas de changer le nom d'index __'programmer'__ en __'votre-nom-programmer'__ ######   
+###### Attention, pour cette partie, si vous utilisez le ElasticSearch en ligne n'oubliez pas de changer le nom d'index __'programmer'__ en __'votre-nom-programmer'__ ######   
 
    __2.1 Premier document indexé :__    
 Requête __POST__ programmer/person/1
@@ -118,7 +118,7 @@ __DELETE__ programmer
 ---
 
 ### 3. Recherche d'article de blog
-Vous disposez un jeu de données à indexer dans elasticsearch contenant les articles du blog de Xebia. Vous allez
+Vous disposez un jeu de données à indexer dans ElasticSearch contenant les articles du blog de Xebia. Vous allez
 devoir réaliser plusieurs étapes afin d'implémenter la recherche de ces articles. Un document réprésente un
 article avec les champs suivants : 
 
@@ -131,7 +131,7 @@ article avec les champs suivants :
   
 ---
 
-###### Attention, pour cet partie, si vous utilisez le elasticsearch en ligne n’oubliez pas de changer le nom d’index __‘xebia’__ en __‘votre-nom-xebia’__ ######
+###### Attention, pour cet partie, si vous utilisez le ElasticSearch en ligne n’oubliez pas de changer le nom d’index __‘xebia’__ en __‘votre-nom-xebia’__ ######
 
   __3.1 Création de l'index__  
 Créér l'index pour recevoir les documents avec le mapping ci-dessous, ce mapping est équivalent au mapping par défaut généré par Elasticsearch mais sera plus facilement modifiable par la suite (Déclaration d'un premier analyzer).
@@ -888,7 +888,7 @@ __4.1 Création de l'index__
 Créér l'index pour recevoir les documents avec le mapping ci-dessous.
 Le mapping n'aura plus besoin d'être modifié. Noter le mapping du champ location.
 
-###### Attention,  pour cette partie, si vous utilisez le elasticsearch en ligne n'oubliez pas de changer le nom d'index __'x-immobilier'__ en __'votre-nom-x-immobilier'__ ######     
+###### Attention,  pour cette partie, si vous utilisez le ElasticSearch en ligne n'oubliez pas de changer le nom d'index __'x-immobilier'__ en __'votre-nom-x-immobilier'__ ######     
      
 __PUT__ x-immobilier
 {% highlight json %}

@@ -642,7 +642,7 @@ __3.11 Aggregations par categories:__
 
 __Attention__ : On doit remonter le texte contenu dans le champ __category__ sans analyse, pour cela vous allez devoir modifier le mapping pour ajouter l'option suivante au type __string__ :   
    `"index": "not_analyzed"`  
-L'attribut __size__ est à 0 car on ne tient pas ici à remonter les documents uniquement le résultat de l'aggrégation
+L'attribut __size__ est à 0 car on ne tient pas ici à remonter les documentsmais  uniquement le résultat de l'aggrégation
   
 <blockquote class = 'solution' markdown="1">
 DELETE xebia     
@@ -881,7 +881,7 @@ Voici un exemple :
 ---
 __4.1 Création de l'index__  
 Créér l'index pour recevoir les documents avec le mapping ci-dessous.
-Le mapping n'aura plus besoin d'être modifier. Noter le mapping du champ location
+Le mapping n'aura plus besoin d'être modifié. Noter le mapping du champ location.
 
 ###### Attention,  pour cette partie, si vous utilisez le elasticsearch en ligne n'oubliez pas de changer le nom d'index __'x-immobilier'__ en __'votre-nom-x-immobilier'__ ######     
      
@@ -935,12 +935,12 @@ Pour indexer tous ces documents en une étape vous allez utiliser curl :
 ---                                     
 __4.3 Bounding box query__    
 
-Pour les besoins du site, il faut être capable de rechercher les appartements avec __4 pièces__ se trouvant dans le __9e arrondissement__.  
+Pour les besoins du site, il faut être capable de rechercher les appartements se trouvant dans le __9e arrondissement__.  
 Le 9e arrondissement pour cette requête est représenté par un rectangle avec les caractéristiques suivantes :   
  - Extrémité en haut à gauche à la position __"lat": 48.88202934722508, "lon": 2.3397765430833624__  
  - Extrémité en bas à droite à la position __"lat": 48.870738  "lon": 2.347842__      
     
-Ecrire une requête composée d'une __geo_bounding_box__ sur ce rectangle et d'un __term__ filter pour remonter tous les appartements de 4 pièces dans le 9e.
+Ecrire une requête composée d'une __geo_bounding_box__ sur ce rectangle pour remonter tous les appartements dans le 9e.
 <blockquote class = 'solution' markdown="1">
 
 GET x-immobilier/apartment/_search
@@ -948,7 +948,7 @@ GET x-immobilier/apartment/_search
 {
   "query": {
     "bool": {
-      "must": [
+      "filter": [
         {
           "geo_bounding_box": {
             "location": {
@@ -963,12 +963,7 @@ GET x-immobilier/apartment/_search
             }
           }
         }
-      ],
-      "filter": {
-        "term": {
-          "nbOfRoom": 4
-        }
-      }
+      ]
     }
   }
 }

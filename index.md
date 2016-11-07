@@ -215,7 +215,7 @@ __GET__ xebia/blog/_search
 {% endhighlight %}
 </blockquote>
 ---
-  __3.4 La requête précédente permet de rechercher sur le contenu des articles. Cependant en effectuant cette requête sur le texte "Recherche full Text", les résultats ne semblent pas remonter de contenu pertinent : En effet, les 2 premiers résultat remontés n'ont pas de rapport avec ces termes.
+  __3.4 La requête précédente permet de rechercher sur le contenu des articles. Cependant en effectuant cette requête sur le texte "Recherche full Text", les résultats ne semblent pas remonter de contenu pertinent : En effet, les 2 premiers résultats remontés n'ont pas de rapport avec ces termes.
 Utiliser l'highlighting afin de comprendre pourquoi ces résultats sont remontés.__
 <blockquote class = 'solution' markdown="1">
 GET xebia/blog/_search
@@ -253,6 +253,9 @@ __Syntaxe du mapping avec analyzer :__
     * Supprimer l'index
     * Re-créér l'index avec le nouveau mapping :   
     * Re-indexer tous les documents (avec le cUrl) 
+
+
+Relancer la requête sur le texte "Recherche full Text" afin de vérifier qu'il y a moins de résultats mais qu'ils sont plus pertinents !
 
 <blockquote class = 'solution' markdown="1">
 __DELETE__ xebia  
@@ -309,8 +312,6 @@ __PUT__ xebia
 __curl -XPUT "http://{host}/{indexName}/blog/_bulk" --data-binary @xebiablog.data__
 </blockquote>
 ---  
-
-Relancer la requête sur le texte "Recherche full Text" afin de vérifier qu'il y a moins de résultats mais qu'ils sont plus pertinents !
    
   __3.6 L'entreprise Typesafe a changé de nom pour Lightbend. Problème, les recherches sur "lightbend" ne remontent que 2 résultats. Modifier le mapping afin que toutes les recherches sur un des noms remontent les 8 résultats associés aux 2 noms d'entreprise.__   
   Pour cela declarez un _filter_ de type synonym dans la partie `"filter": {},`du mapping et utilisez le dans l'analyzer my_analyzer 

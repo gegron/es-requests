@@ -6,15 +6,15 @@ layout: main
 
 ### 1. Préparation de votre environnement
 Pour réaliser les différentes étapes de ce hands-on, vous avez besoin d'un ElasticSearch et d'un sense  
- Plusieurs choix s'offre à vous :  
-* __Choix numéro 1 : Vous avez docker sur votre machine, utilisez Elasticsearch via Docker :__  
+ Plusieurs choix s'offrent à vous :  
+* __Choix numéro 1 : Vous avez docker sur votre machine, utiliser Elasticsearch via Docker :__  
 `docker run -p 9200:9200 -p 5601:5601 ibeauvais/elasticsearch-kibana`  
 
 Vous pouvez ensuite accéder à Elasticsearch sur [http://localhost:9200/](http://localhost:9200/) et
 sense sur [http://localhost:5601/app/sense](http://localhost:5601/app/sense)  
 (si vous utilisez docker sur une vm ou via docker-machine remplacer localhost par l'ip de la vm)
     
-* __Choix numéro 2 : Vous avez Java d'installé (minimum 1.7), utilisez un Elasticsearch local (fourni via la clef usb):__  
+* __Choix numéro 2 : Vous avez Java sur votre machine (minimum 1.7), utiliser un Elasticsearch local (fourni via la cle USB):__  
     - dézipper elasticsearch-2.4.1.zip  
     - Démarrer le avec la commande __elasticsearch-2.4.1/bin/elasticsearch__ ou __elasticsearch-2.4.1/bin/elasticsearch.bat__ (windows)   
 Vous pouvez ensuite accéder à Elasticsearch sur [http://localhost:9200/](http://localhost:9200/) et
@@ -26,7 +26,7 @@ sense sur la version en ligne sur [http://kibana.xebicon.aws.xebiatechevent.info
 * __Choix numéro 3 : Utiliser l'Elasticsearch mis à votre disposition (partagé par tout le monde)__  
 
 Vous pouvez ensuite accéder à Elasticsearch sur [http://els.xebicon.aws.xebiatechevent.info/](http://els.xebicon.aws.xebiatechevent.info/) et sense sur [http://kibana.xebicon.aws.xebiatechevent.info:5601/app/sense](http://kibana.xebicon.aws.xebiatechevent.info:5601/app/sense)  
-Comme cet Elasticsearch est utilisé par plusieurs personnes, veuillez préfixer le nom de vos indexes par
+Comme cet Elasticsearch est utilisé par plusieurs personnes, veuillez préfixer le nom de vos index par
 votre nom lors des différentes requêtes de l'exercice.   
   
 Exemple : Au lieu de faire GET http://els.xebicon.aws.xebiatechevent.info/__myIndex__/_search, je fais GET
@@ -119,10 +119,10 @@ __DELETE__ programmer
 
 ### 3. Recherche d'article de blog
 Vous disposez un jeu de données à indexer dans Elasticsearch contenant les articles du blog de Xebia. Vous allez
-devoir réaliser plusieurs étapes afin d'implémenter la recherche de ces articles. Un document réprésente un
+devoir réaliser plusieurs étapes afin d'implémenter la recherche de ces articles. Un document représente un
 article avec les champs suivants : 
 
-* __title__ : le titre de l'article
+* __title__ : Le titre de l'article
 * __pubDate__ : La date de publication de l'article
 * __creator__ : L'auteur de l'article
 * __category__ : L'article appartient à une ou plusieurs catégories
@@ -134,8 +134,8 @@ article avec les champs suivants :
 ###### Attention, pour cet partie, si vous utilisez le Elasticsearch en ligne n’oubliez pas de changer le nom d’index __‘xebia’__ en __‘votre-nom-xebia’__ ######
 
   __3.1 Création de l'index__  
-Créér l'index pour recevoir les documents avec le mapping ci-dessous, ce mapping est équivalent au mapping par défaut généré par Elasticsearch mais sera plus facilement modifiable par la suite (Déclaration d'un premier analyzer).
- Pour créér l'index 'xebia' avec ce mapping :  
+Créer l'index pour recevoir les documents avec le mapping ci-dessous. Ce mapping est équivalent au mapping par défaut généré par Elasticsearch mais sera plus facilement modifiable par la suite (Déclaration d'un premier analyzer).
+ Pour créer l'index 'xebia' avec ce mapping :  
     
 __PUT__ xebia
 {% highlight json %}
@@ -186,7 +186,7 @@ __PUT__ xebia
 }
 {% endhighlight %}
 ---
-  __3.2 Indéxer les documents__  
+  __3.2 Indexer les documents__  
 Pour indexer tous ces documents en une étape vous allez utiliser curl :  
 
  * Télécharger le dataset [xebiablog.data](data/xebiablog.data)
@@ -201,7 +201,7 @@ Le fichier __xebiablog.data__ contient l'ensemble des documents à indexer au fo
 {"title":"Scrum pour la Recherche","pubDate":"2016-09-19T13:39:42"  ...}        
 [...]  
 
-  __3.3 En vous inspirant de l'exercice     2.5, ecrire une requête qui permet de remonter les articles dont <u>le contenu</u> parle de "kodo kojo"__
+  __3.3 En vous inspirant de l'exercice 2.5, écrire une requête qui permet de remonter les articles dont <u>le contenu</u> parle de "kodo kojo"__
 <blockquote class = 'solution' markdown="1">
 __GET__ xebia/blog/_search
 {% highlight json %}
@@ -251,7 +251,7 @@ __Syntaxe du mapping avec analyzer :__
 
   * pour modifier le mapping vous devez : 
     * Supprimer l'index
-    * Re-créér l'index avec le nouveau mapping :   
+    * Re-créér l'index avec le nouveau mapping    
     * Re-indexer tous les documents (avec le cUrl) 
 
 
@@ -498,7 +498,7 @@ __3.9 Suggestion :__
   
   -  Ajoutez un champ "suggest" au mapping, de type __completion__ et avec comme propriété __"payloads": true__.   
   Ce champ va contenir le texte pour la suggestion mais sera indexé dans une structure optimisée pour faire de la recherche rapide sur du texte.  
-  - Utilisez le fichier [xebiablogWithSuggest.data](data/xebiablogWithSuggest.data) pour l'indéxation. Ce fichier contient les mêmes documents mais avec le champ suggest au format suivant :   
+  - Utilisez le fichier [xebiablogWithSuggest.data](data/xebiablogWithSuggest.data) pour l'indexation. Ce fichier contient les mêmes documents mais avec le champ suggest au format suivant :   
 {% highlight json %}
   {
     "suggest": {
@@ -626,7 +626,7 @@ __3.10 Suggestion fuzzy:__
 {% endhighlight %}
 </blockquote>
 ---
-__3.11 Aggregations par categories:__   
+__3.11 Agrégations par categories:__   
   Nous souhaitons maintenant ramener toutes les catégories possibles pour un blog.  
   Pour cela utilisez une aggrégations de type __terms__.
 
@@ -730,10 +730,10 @@ GET xebia/blog/_search
 {% endhighlight %}
 </blockquote>
 ---   
-__3.12 Aggregations auteurs par categories:__   
-Nous voulons maintenant remonter les différents auteurs par categories. Modifier la requête précédente pour ajouter une sous aggrégations à l'aggrégation par categories:   
+__3.12 Agrégations auteurs par catégories:__   
+Nous voulons maintenant remonter les différents auteurs par catégories. Modifier la requête précédente pour ajouter une sous agrégations à l'agrégation par catégories:   
 
-  __Syntaxe pour ajouter une sous-aggrégation:__  
+  __Syntaxe pour ajouter une sous-agrégation:__  
   GET xebia/blog/_search
   {% highlight json %}      
 {
@@ -853,18 +853,18 @@ GET xebia/blog/_search
 
 ### 4. Recherche appartement
 
-L'agence X-immobilier vient de créér son site internet de recherche de bien immobilier en Île de France.
-Vous disposez d'un jeu de données à indéxer dans Elasticsearch contenant des appartements à vendre 
+L'agence X-immobilier vient de créer son site internet de recherche de biens immobiliers sur Paris.
+Vous disposez d'un jeu de données à indexer dans Elasticsearch contenant des appartements à vendre 
 avec les champs suivants : 
 
 * __price__ : Le prix en euro
 * __nbOfRoom__ : Nombre de pièce
 * __surface__ : La surface en m²
-* __address__ : un object contenant l'adresse :  
+* __address__ : un 'object' contenant l'adresse :  
     * __street__ : le numéro et la voie
-    * __postalCode__ : le Code postal
+    * __postalCode__ : le code postal
     * __city__ : La ville
-* __location__ : un object contenant les coordonnées géoloc
+* __location__ : un object contenant les coordonnées de géolocalisation
     * __lat__ : la latitude
     * __lon__ : la longitude    
     
@@ -886,7 +886,7 @@ Voici un exemple :
 }{% endhighlight %}
 ---
 __4.1 Création de l'index__  
-Créér l'index pour recevoir les documents avec le mapping ci-dessous.
+Créer l'index pour recevoir les documents avec le mapping ci-dessous.
 Le mapping n'aura plus besoin d'être modifié. Noter le mapping du champ location.
 
 ###### Attention,  pour cette partie, si vous utilisez le Elasticsearch en ligne n'oubliez pas de changer le nom d'index __'x-immobilier'__ en __'votre-nom-x-immobilier'__ ######     
@@ -928,7 +928,7 @@ __PUT__ x-immobilier
 }
 {% endhighlight %}
 ---
-  __4.2 Indéxer les documents__  
+  __4.2 Indexer les documents__  
 Pour indexer tous ces documents en une étape vous allez utiliser curl :  
 
  * Télécharger le dataset [apartment.data](data/apartment.data)
@@ -946,7 +946,7 @@ Le 9e arrondissement pour cette requête est représenté par un rectangle avec 
  - Extrémité en haut à gauche à la position __"lat": 48.88202934722508, "lon": 2.3397765430833624__  
  - Extrémité en bas à droite à la position __"lat": 48.870738  "lon": 2.347842__      
     
-Ecrire une requête avec un __filtre__  __geo_bounding_box__ sur ce rectangle pour remonterles 21 appartements dans le 9e.
+Ecrire une requête avec un __filtre__  __geo_bounding_box__ sur ce rectangle pour remonter les 21 appartements dans le 9e.
 <blockquote class = 'solution' markdown="1">
 
 GET x-immobilier/apartment/_search
@@ -976,9 +976,9 @@ GET x-immobilier/apartment/_search
 {% endhighlight %}
 </blockquote>
 ---
-__4.3 Filtre par rapport à la distance depuis un point__  
+__4.4 Filtre par rapport à la distance depuis un point__  
 Finalement le 9e arrondissement n'est pas assez restrictif, il faut être capable de rechercher les appartements à 300m ou moins du métro cadet __lat: 48.876135__, __"lon": 2.344876__.   
-Remplacer le __geo_bounding_box__ filter de la requête précédente par un filtre de type __geo_distance__  afin de de remonter les 10 appartements à 300m ou moins.   
+Remplacer le __geo_bounding_box__ filter de la requête précédente par un filtre de type __geo_distance__  afin de remonter les 10 appartements à 300m ou moins.   
  
 
 <blockquote class = 'solution' markdown="1">
@@ -1006,7 +1006,7 @@ GET x-immobilier/apartment/_search
 {% endhighlight %}
 </blockquote>
 ---
-__4.4 Tri par rapport à la distance depuis un point__  
+__4.5 Tri par rapport à la distance depuis un point__  
 La requête précédente permet aux utilisateurs de remonter les résultats attendus, cependant les utilisateurs souhaiteraient voir en priorité les appartements les plus proches.  
 Modifier la requête pour ajouter le tri par ___geo_distance__  
 Vous devez avoir en premier l'appartement se trouvant __46 RUE DE TREVISE__
@@ -1045,7 +1045,7 @@ GET x-immobilier/apartment/_search
 {% endhighlight %}
 </blockquote>
 ---
-__4.5 Geo_distance aggrégation__  
+__4.6 Geo_distance aggrégation__  
 Afin d'évaluer la quantité de bien se trouvant à proximité du métro cadet, nous aimerions avoir le compte pour les plages de distance suivantes :      
 - 0 à 100m  
 - 100 à 200m  
@@ -1055,7 +1055,7 @@ Afin d'évaluer la quantité de bien se trouvant à proximité du métro cadet, 
 - 500 à 1000m  
     
 Pour cela vous devez écrire une requête d'aggrégation de type geo_distance.  
-__Pour vous aider inspirer vous des précédentes requêtes d'aggégations et de l'auto complétion.__     
+__Pour vous aider inspirer vous des précédentes requêtes d'agrégations et de l'auto complétion.__     
 <blockquote class = 'solution' markdown="1">
 
 GET x-immobilier/apartment/_search
